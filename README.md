@@ -4,7 +4,7 @@ Viewer &amp; Editor
 ## これは何
   アクセシビリティを意識したテキストビュワー、ビュワーと同じスタイリングで編集できるエディタ、をテーマに制作中。
 
-https://user-images.githubusercontent.com/91081804/134039789-89b57896-06a5-449b-812f-c891b57554b1.gif
+![Videotogif](https://user-images.githubusercontent.com/91081804/134039789-89b57896-06a5-449b-812f-c891b57554b1.gif)
 
 
 ## 機能
