@@ -91,7 +91,6 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
 
     useEffect(() => {
         if (text) {
-            console.log("text change")
             text.forEach((_, i) => {
                 listRef.current[i] = React.createRef();
             })
@@ -244,13 +243,13 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
     }, [isEdit])
 
     const memo = (ref, select: number) => {
-        if (ref.current[select]) {
-            ref.current[select].current.focus()
+        const currentDom = ref.current[select]
+        if (currentDom) {
+            currentDom.current.focus()
             //selectionShift(select)
-            console.log("select:" + select)
-            const bottom: number = ref.current[select].current.getBoundingClientRect().top + window.pageYOffset
+            const bottom: number = currentDom.current.getBoundingClientRect().top + window.pageYOffset
             if (bottom > 500) {
-                ref.current[select].current.scrollIntoView({
+                currentDom.current.scrollIntoView({
                     block: 'center',
                     behavior: "smooth"
                 });
@@ -312,7 +311,6 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
 
         if (e.key === "Escape") {
             e.preventDefault();
-            console.log("Esc")
             updateState(false)
         }
 
