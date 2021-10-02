@@ -1,4 +1,40 @@
 
+interface StyleAction {
+    payload: {
+        fontSize: number,
+        height: number,
+        font: string,
+        color: {
+            fontColor: string,
+            modal: string,
+            highlight: string,
+            shadow: string,
+            backgroundModal: string
+        },
+        fontWeight: number,
+        splitWords: string[]
+    },
+    type: 'SET_STYLE'
+}
+
+interface StyleAction {
+    payload: {
+        fontSize: number,
+        height: number,
+        font: string,
+        color: {
+            fontColor: string,
+            modal: string,
+            highlight: string,
+            shadow: string,
+            backgroundModal: string
+        },
+        fontWeight: number,
+        splitWords: string[]
+    },
+    type: 'SET_STYLE'
+}
+
 const readLocalStorage = (key: string) => {
     return new Promise((resolve, reject) => {
         chrome.storage.sync.get([key], (result) => {
@@ -13,14 +49,15 @@ const readLocalStorage = (key: string) => {
 }
 
 
+export type StyleState = typeof storage
+
+
+
 export const getData = async () => {
-    return await readLocalStorage('splt_styles').then((result: typeof storage) => {
+    return await readLocalStorage('splt_styles').then((result?: StyleState) => {
         if (!result) {
             chrome.storage.sync.set({ splt_styles: storage }, () => { })
         } else {
-            console.log("result " + result);
-            storage = result
-            console.log(storage)
             return result
         }
     });
@@ -41,26 +78,6 @@ export let storage = {
         },
         splitWords: ["、", "。", "」", "?", "⏎", "!", ",", ")", "・"]
     }
-}
-
-export type StyleState = typeof storage
-
-interface StyleAction {
-    payload: {
-        fontSize: number,
-        height: number,
-        font: string,
-        color: {
-            fontColor: string,
-            modal: string,
-            highlight: string,
-            shadow: string,
-            backgroundModal: string
-        },
-        fontWeight: number,
-        splitWords: string[]
-    },
-    type: 'SET_STYLE'
 }
 
 export const reducerFunc = (state: StyleState, action: StyleAction) => {
