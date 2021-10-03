@@ -1,5 +1,5 @@
 import React, { useContext, useReducer } from "react"
-import { reducerFunc, storage } from "./reducer"
+import { reducerFunc, storage, initStorage } from "./reducer"
 export type StyleState = typeof storage
 
 interface StyleAction {
@@ -22,10 +22,12 @@ interface StyleAction {
 
 const dispatchContext = React.createContext((() => true) as React.Dispatch<StyleAction>)
 
-const StyleContext = React.createContext(storage)
+const initContext = storage ? storage : initStorage
+
+const StyleContext = React.createContext(initContext)
 
 export const StyleContextProvider: React.FC = (props) => {
-    const [state, dispatch] = useReducer(reducerFunc, storage);
+    const [state, dispatch] = useReducer(reducerFunc, initContext);
     return (
         <dispatchContext.Provider value={dispatch}>
             <StyleContext.Provider value={state}>
