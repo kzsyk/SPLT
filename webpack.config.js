@@ -10,7 +10,6 @@ module.exports = {
         Modal: path.join(__dirname, "src/Modal.tsx"),
         ConfigMenu: path.join(__dirname, "src/ConfigMenu.tsx"),
         Dropdown: path.join(__dirname, "src/Dropdown.tsx"),
-        Editor: path.join(__dirname, "src/Editor.tsx"),
         ScrollBar: path.join(__dirname, "src/ScrollBar.tsx"),
         Context: path.join(__dirname, "src/Context.tsx")
     },
@@ -30,7 +29,7 @@ module.exports = {
             use: "ts-loader"
         },
         {
-            include: [/node_modules/, "/src/background/*", "/src/Dropdown/*"],
+            include: [/node_modules/, "/src/*"],
             test: /\.css$/,
             use: [
                 "style-loader",
