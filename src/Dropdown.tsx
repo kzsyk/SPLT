@@ -65,7 +65,6 @@ const LeftDiv = styled.div`
     margin:3%;
     overflow-y: hidden;
     overflow-x: hidden;
-    will-change: transform;
 `
 
 const RightDiv = styled.div`
@@ -86,7 +85,7 @@ let Dropdown = (props, ref) => {
     const height = 1.5
     const font = "メイリオ"
     const fontWeight = 150
-    const init_splitWord: string[] = ["、", "。", "」", "?", "⏎", "!", ",", ")", "・"]
+    const init_splitWord: string[] = ["、", "。", "」", "?", "!", ",", ")"]
 
 
     const init_color = {
@@ -107,11 +106,11 @@ let Dropdown = (props, ref) => {
     }
 
     const [isOpen, setIsOpen] = useState<boolean>(props.isOpen);
-    const [active, setActive] = useState<number>(0);
+    const [active, setActive] = useState<number>(1);
     const handleClick = e => {
-        const index = parseInt(e.target.id, 0);
+        const index = parseInt(e.currentTarget.value, 0);
         console.log(index)
-        if (index !== active) {
+        if (index) {
             setActive(index);
         }
     };
@@ -234,7 +233,7 @@ let Dropdown = (props, ref) => {
                         <div>
                             <Typography id="Font Color" gutterBottom>
                                 Font Color
-                                    </Typography>
+                            </Typography>
                             <Grid item xs={2}>
                                 <ColorPicker
                                     dispatchCol={(color: string) => {
@@ -252,7 +251,7 @@ let Dropdown = (props, ref) => {
                         <div>
                             <Typography id="Modal" gutterBottom>
                                 Modal
-                                    </Typography>
+                            </Typography>
                             <Grid item xs={2}>
                                 <ColorPicker
                                     dispatchCol={(color: string) => {
@@ -269,7 +268,7 @@ let Dropdown = (props, ref) => {
                         <div>
                             <Typography id="Highlight" gutterBottom>
                                 Highlight
-                                    </Typography>
+                            </Typography>
                             <Grid item xs={2}>
                                 <ColorPicker
                                     dispatchCol={(color: string) => {
@@ -306,7 +305,7 @@ let Dropdown = (props, ref) => {
                             <div>
                                 <Typography id="BackgroundModal" gutterBottom>
                                     BackgroundModal
-                                    </Typography>
+                                </Typography>
                                 <Grid item xs={1}>
                                     <ColorPicker
                                         dispatchCol={(color: string) => {
@@ -438,8 +437,8 @@ let Dropdown = (props, ref) => {
                                 splitWords={null}
                             >
                                 This is config mode.<br />
-                                    SPLT is Proofreading tool.
-                                </Sample>
+                                SPLT is Proofreading tool.
+                            </Sample>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -451,24 +450,24 @@ let Dropdown = (props, ref) => {
         <div className={classes.root} ref={confRef}>
             <LeftDiv>
                 <Tabs>
-                    <Tab onClick={handleClick} active={active === 0} id={"0"}>
+                    <Tab onClick={handleClick} active={active === 1} value={"1"}>
                         TEXT
-                        </Tab>
-                    <Tab onClick={handleClick} active={active === 1} id={"1"}>
+                    </Tab>
+                    <Tab onClick={handleClick} active={active === 2} value={"2"}>
                         COLOR
-                        </Tab>
-                    <Tab onClick={handleClick} active={active === 2} id={"2"}>
+                    </Tab>
+                    <Tab onClick={handleClick} active={active === 3} value={"3"}>
                         SPLIT WORD
-                        </Tab>
+                    </Tab>
                 </Tabs>
                 <ScrollBar>
-                    <Content active={active === 0}>
+                    <Content active={active === 1}>
                         <TextStyle />
                     </Content>
-                    <Content active={active === 1}>
+                    <Content active={active === 2}>
                         <ColorStyle />
                     </Content>
-                    <Content active={active === 2}>
+                    <Content active={active === 3}>
                         <TagsForm dispatchCol={(tags: string[]) => {
                             styleChange("splitWords", tags, "_")
                         }}
