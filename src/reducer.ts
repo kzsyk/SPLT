@@ -17,8 +17,8 @@ interface StyleAction {
     type: 'SET_STYLE'
 }
 
-interface StyleAction {
-    payload: {
+interface storageData {
+    style?: {
         fontSize: number,
         height: number,
         font: string,
@@ -31,8 +31,7 @@ interface StyleAction {
         },
         fontWeight: number,
         splitWords: string[]
-    },
-    type: 'SET_STYLE'
+    }
 }
 
 const readLocalStorage = (key: string) => {
@@ -49,21 +48,11 @@ const readLocalStorage = (key: string) => {
 }
 
 
-export type StyleState = typeof storage
+export type StyleState = typeof initStorage
 
+export let storage: storageData;
 
-
-export const getData = async () => {
-    return await readLocalStorage('splt_styles').then((result?: StyleState) => {
-        if (!result) {
-            chrome.storage.sync.set({ splt_styles: storage }, () => { })
-        } else {
-            return result
-        }
-    });
-}
-
-export let storage = {
+export const initStorage: storageData = {
     style: {
         fontSize: 14,
         height: 1.5,
@@ -79,6 +68,18 @@ export let storage = {
         splitWords: ["、", "。", "」", "?", "⏎", "!", ",", ")", "・"]
     }
 }
+
+export const getData = async () => {
+    return await readLocalStorage('splt_styles').then((result: storageData) => {
+        if (!result) {
+            chrome.storage.sync.set({ splt_styles: initStorage }, () => { })
+        } else {
+            storage = result
+            return result
+        }
+    });
+}
+
 
 export const reducerFunc = (state: StyleState, action: StyleAction) => {
     switch (action.type) {
