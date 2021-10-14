@@ -1,0 +1,21 @@
+body{
+    width: 600px;
+    height: 400px;
+    max-width: 400px;
+    min-width: 380px; 
+    padding: 2% 5% 3% 1%;
+
+    position:relative;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    
+    will-change: transform;
+    white-space: pre-wrap;
+    overflow-wrap: word-wrap;
+};
+
+
+div{
+    display: inline;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+};
