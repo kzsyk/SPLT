@@ -113,14 +113,14 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                         onKeyDown={(e) => handleKeyDown(e, index, listRef)}
                         onClick={(e) => click(e, listRef.current[index])}
                         onMouseDown={(e) => click(e, listRef.current[index])}
-                        onBlur={(e) => blur(e, index, listRef.current[index].current)}
-                        onFocus={(e) => focus(e, index, listRef.current[index].current)}
+                        onBlur={(e) => blur(e, listRef.current[index].current)}
+                        onFocus={(e) => focus(e, listRef.current[index].current)}
 
                         contentEditable={isEdit}
                         suppressContentEditableWarning={true}
-                        blurFontColor={global.color["fontColor"]}
-                        focusFontColor={global.color["highlight"]}
-                        shadow={global.color["shadow"]}
+                        blurFontColor={global.color?global.color["fontColor"]:"gray"}
+                        focusFontColor={global.color?global.color["highlight"]:"black"}
+                        shadow={global.color?global.color["shadow"]:"gray"}
                     >
                         {result}
                     </Pstyle >
@@ -132,13 +132,11 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
     useEffect(() => {
         chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
             sendResponse()
-            console.log(request)
             if (request.message === 'select') {
                 if (!request.text) {
                     await editText()
                 } else {
                     const text = rawText
-                    console.log(text)
                     const split = splitText(text, splitWords)
                     setTextOnce(split)
                     getTextData({ ...textData, sumWord: text.length })
@@ -151,7 +149,6 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                         .then(function (text) {
                             pasteArea.textContent = text;
                             const textContent = pasteArea.textContent
-                            console.log(text)
                             const split = splitText(textContent, splitWords)
                             setTextOnce(split)
                             getTextData({ ...textData, sumWord: text.length })
@@ -164,7 +161,6 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
             }
             return true
         })
-        console.log(listRef)
     }, []);
 
 
@@ -187,14 +183,14 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                     onKeyDown={(e) => handleKeyDown(e, index, listRef)}
                     onClick={(e) => click(e, listRef.current[index])}
                     onMouseDown={(e) => click(e, listRef.current[index])}
-                    onBlur={(e) => blur(e, index, listRef.current)}
-                    onFocus={(e) => focus(e, index, listRef.current[index].current)}
+                    onBlur={(e) => blur(e, listRef.current)}
+                    onFocus={(e) => focus(e, listRef.current[index].current)}
 
                     contentEditable={isEdit}
                     suppressContentEditableWarning={true}
-                    blurFontColor={global.color["fontColor"]}
-                    focusFontColor={global.color["highlight"]}
-                    shadow={global.color["shadow"]}
+                    blurFontColor={global.color?global.color["fontColor"]:"gray"}
+                    focusFontColor={global.color?global.color["highlight"]:"black"}
+                    shadow={global.color?global.color["shadow"]:"gray"}
                 >
                     {result}
                 </Pstyle >
@@ -216,13 +212,13 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
         }
     }, [isEdit])
 
-    const blur = useCallback((e, i: number, ref) => {
+    const blur = useCallback((e, ref) => {
         e.preventDefault()
         callbackEdit(false, ref, 1);
 
     }, [isEdit])
 
-    const focus = useCallback((e, i: number, ref) => {
+    const focus = useCallback((e, ref) => {
         e.preventDefault()
         const bottom: number = ref.getBoundingClientRect().top + window.pageYOffset;
         focusStore(ref)
@@ -292,9 +288,7 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 } else {
                     memo(ref, i + 1);
                     //selectionShift(Math.min(textData.length - 1, selection + 1));
-                    console.log("move right")
                 }
-                console.log(ref.current[i].current.innerText.length)
                 e.stopPropagation();
             }
             if (e.key === "ArrowLeft") {
@@ -305,7 +299,6 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 } else {
                     memo(ref, i - 1);
                 }
-                console.log(ref.current[i].current.innerText.length)
             }
         }
 
@@ -318,7 +311,6 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
             if (!isEdit) {
                 e.preventDefault();
                 callbackEdit(true, ref.current[i].current, 0)
-                console.log(isEdit)
                 e.stopPropagation();
             }
         }

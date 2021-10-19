@@ -38,7 +38,6 @@ const readLocalStorage = (key: string) => {
     return new Promise((resolve, reject) => {
         chrome.storage.sync.get([key], (result) => {
             if (result) {
-                console.dir(result)
                 resolve(result[key]);
             } else {
                 reject(new Error('promise!!!'));
@@ -80,6 +79,7 @@ export const getData = async () => {
     });
 }
 
+getData()
 
 export const reducerFunc = (state: StyleState, action: StyleAction) => {
     switch (action.type) {

@@ -22,7 +22,7 @@ interface StyleAction {
 
 const dispatchContext = React.createContext((() => true) as React.Dispatch<StyleAction>)
 
-const initContext = storage ? storage : initStorage
+const initContext = storage ? storage: initStorage
 
 const StyleContext = React.createContext(initContext)
 

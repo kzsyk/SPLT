@@ -1,10 +1,7 @@
 import React, { useState, useCallback, useMemo, useRef } from "react";
 import ReactDOM from "react-dom";
-import styled, { StyleSheetManager } from 'styled-components';
+import styled from 'styled-components';
 import FocusLock from "react-focus-lock"
-
-import NewWindow from 'react-new-window'
-
 
 import { zIndexSearch, backfaceFixed } from './util'
 import { SelectText } from "./SelectText"
@@ -12,7 +9,8 @@ import { Modal } from './Modal'
 import { ConfigMenu } from "./ConfigMenu"
 import { StyleContextProvider } from "./Context"
 import { useGlobalState } from "./Context"
-import { IdleController } from "./IdleController"
+
+//import { NewWindow } from "./NewWindow"
 
 type ModalBackground = {
     isOpen: boolean;
@@ -29,22 +27,20 @@ const Background = styled.div<ModalBackground>`
     height:${props => props.isOpen ? "100vh" : "0vh"};
     visibility: ${props => props.isOpen ? "visible" : "hidden"};
     overflow-x: hidden;
+    will-change: transform;
 `
 
 export const ContentComponent: React.FC = () => {
     const [show, setShow] = useState(false)
-    const [isOpenNewWindow, setIsOpenNewWindow] = useState(false)
+    //const [isOpenNewWindow, setIsOpenNewWindow] = useState(false)
     const updateState = useCallback((isShow: boolean) => {
         setShow(isShow)
     }, [])
-    const Ref = useRef()
-
+    /* 
     const windowOpen = (isOpen: boolean) => {
-        console.log(isOpenNewWindow)
         setIsOpenNewWindow(isOpen)
-        console.log(isOpen)
     }
-
+    */
     const global = useGlobalState()
     useMemo(() => {
         if (show) {
@@ -58,58 +54,50 @@ export const ContentComponent: React.FC = () => {
     const handleKeyDown = useCallback((e) => {
         if (e.key === "Escape") {
             e.preventDefault();
-            console.log("Esc")
             setShow(false)
         }
     }, [])
 
-    return <FocusLock group={"background"} autoFocus={show}>
-        <Background
-            isOpen={show}
-            backgroundColor={global.color["backgroundModal"]}
-            onKeyDown={(e) => handleKeyDown(e)}
-        >
-            <Modal
+    return <>
+            <Background
                 isOpen={show}
-                width={show ? "80%" : "0%"}
-                height={show ? "100vh" : "0%"}
-                color={global.color["modal"]}
+                backgroundColor={global.color ? global.color["backgroundModal"]:"white"}
+                onKeyDown={(e) => handleKeyDown(e)}
             >
-                <SelectText
-                    updateState={useMemo(() => updateState, [])}
-                />
-            </Modal>
-            <ConfigMenu
-                isOpen={show}
-                openTab={(isOpen: boolean) => {
-                    windowOpen(isOpen)
-                }}
-            />
-            {
-                isOpenNewWindow
-                    ?
-                    <NewWindow onUnload={() => { console.log("a") }} copyStyles={false}>
-                        <StyleSheetManager target={Ref.current}>
-                            <div ref={Ref}>
-                                <Popup />
-                            </div>
-                        </StyleSheetManager>
-                    </NewWindow >
+                <FocusLock group={"background"} autoFocus={show}>
+                <Modal
+                    isOpen={show}
+                    width={show ? "80%" : "0%"}
+                    height={show ? "100vh" : "0%"}
+                    color={global.color ? global.color["modal"]:"white"}
+                >
 
-                    : null
-            }
-            <IdleController isOpen={show} />
-        </Background >
-    </FocusLock >
+                    <SelectText
+                        updateState={useMemo(() => updateState, [])}
+                    />
+                    
+                </Modal>
+                <ConfigMenu
+                    isOpen={show}
+                    /*
+                     openTab={(isOpen: boolean) => {
+                        windowOpen(isOpen)
+                    }} 
+                    */
+                />
+                </FocusLock >
+            </Background >
+    </>
 }
 
 const Popup: React.FC = () => {
     return (
-        < StyleContextProvider >
+        <StyleContextProvider>
             <ContentComponent />
         </ StyleContextProvider>
     )
 
 };
+
 
 ReactDOM.render(<Popup />, document.body.insertBefore(document.createElement('div'), document.body.firstChild));

@@ -2,8 +2,7 @@ import React, { useCallback, useState, useEffect, useRef, forwardRef, useImperat
 import styled from 'styled-components';
 
 import { Tabs, Tab, Content } from "./Tabs";
-
-
+import {Help}from"./Help";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -93,7 +92,7 @@ let Dropdown = (props, ref) => {
         "modal": "rgba(240,240,250,1)",
         "highlight": "rgba(0,0,0,1)",
         "shadow": "rgba(0,0,0,.5)",
-        "backgroundModal": "rgba(240,240,250,0.5)"
+        "backgroundModal": "rgba(240,240,250,1)"
     }
 
     const init_dammy = {
@@ -109,7 +108,7 @@ let Dropdown = (props, ref) => {
     const [active, setActive] = useState<number>(1);
     const handleClick = e => {
         const index = parseInt(e.currentTarget.value, 0);
-        console.log(index)
+
         if (index) {
             setActive(index);
         }
@@ -138,14 +137,12 @@ let Dropdown = (props, ref) => {
             modal: "rgba(240,240,250,1)",
             highlight: "rgba(0,0,0,1)",
             shadow: "rgba(0,0,0,.5)",
-            backgroundModal: "rgba(240,240,250,0.5)"
+            backgroundModal: "rgba(240,240,250,1)"
         },
         splitWords: init_splitWord
     })
 
-    const callback = useCallback((value) => {
-        setStyle(value)
-    }, [])
+    const callback = (value) => {setStyle(value)}
 
     useEffect(() => {
         if (isOpen === true) {
@@ -168,7 +165,7 @@ let Dropdown = (props, ref) => {
                     if (!result) { updateValue("", init_dammy, "") }
                     else {
                         const init: Style = await result["splt_styles"];
-                        console.log("unmount")
+                        console.log(init)
                         callback(init)
                         updateValue("", init, "")
                     }
@@ -177,6 +174,7 @@ let Dropdown = (props, ref) => {
         };
         f();
         const cleanup = () => {
+            console.log(style.color)
             unmounted = true;
         };
         console.log("crean up")
@@ -228,19 +226,19 @@ let Dropdown = (props, ref) => {
     const ColorStyle = () => {
         return (
             <>
-                <Grid container spacing={3} >
+                <Grid container spacing={10} >
                     <Grid item >
                         <div>
                             <Typography id="Font Color" gutterBottom>
                                 Font Color
                             </Typography>
-                            <Grid item xs={2}>
+                            <Grid item xs={1}>
                                 <ColorPicker
                                     dispatchCol={(color: string) => {
                                         styleChange("color", color, "fontColor")
                                     }}
                                     initial={
-                                        style.color["fontColor"] ? style.color["fontColor"] : init_color["fontColor"]
+                                        style.color ? style.color.fontColor : init_color["fontColor"]
                                     }
                                 />
                             </Grid>
@@ -252,13 +250,13 @@ let Dropdown = (props, ref) => {
                             <Typography id="Modal" gutterBottom>
                                 Modal
                             </Typography>
-                            <Grid item xs={2}>
+                            <Grid item xs={1}>
                                 <ColorPicker
                                     dispatchCol={(color: string) => {
                                         styleChange("color", color, "modal")
                                     }}
                                     initial={
-                                        style.color["modal"] ? style.color["modal"] : init_color["modal"]
+                                        style.color ? style.color.modal : init_color["modal"]
                                     }
                                 />
                             </Grid>
@@ -269,22 +267,20 @@ let Dropdown = (props, ref) => {
                             <Typography id="Highlight" gutterBottom>
                                 Highlight
                             </Typography>
-                            <Grid item xs={2}>
+                            <Grid item xs={1}>
                                 <ColorPicker
                                     dispatchCol={(color: string) => {
                                         styleChange("color", color, "highlight")
                                     }}
                                     initial={
-                                        style.color["highlight"] ? style.color["highlight"] : init_color["highlight"]
+                                        style.color ? style.color.highlight: init_color["highlight"]
                                     }
                                 />
                             </Grid>
                         </div>
                     </Grid>
-
-                    <Grid container spacing={3} >
-                        <Grid item >
-                            <div>
+                    <Grid item >
+                        <div>
                                 <Typography id="shadow" gutterBottom>
                                     shadow
                                 </Typography>
@@ -294,14 +290,14 @@ let Dropdown = (props, ref) => {
                                             styleChange("color", color, "shadow")
                                         }}
                                         initial={
-                                            style.color["shadow"] ? style.color["shadow"] : init_color["shadow"]
+                                            style.color ? style.color.shadow : init_color["shadow"]
                                         }
                                     />
                                 </Grid>
-                            </div>
-                        </Grid>
+                        </div>
+                    </Grid>
 
-                        <Grid item>
+                    <Grid item>
                             <div>
                                 <Typography id="BackgroundModal" gutterBottom>
                                     BackgroundModal
@@ -312,12 +308,11 @@ let Dropdown = (props, ref) => {
                                             styleChange("color", color, "backgroundModal")
                                         }}
                                         initial={
-                                            style.color["backgroundModal"] ? style.color["backgroundModal"] : init_color["backgroundModal"]
+                                            style.color ? style.color.backgroundModal : init_color["backgroundModal"]
                                         }
                                     />
                                 </Grid>
                             </div>
-                        </Grid>
                     </Grid>
                 </Grid>
             </>
@@ -422,24 +417,19 @@ let Dropdown = (props, ref) => {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item>
-                        <Grid item xs={12}>
-                        </Grid>
-                    </Grid>
-                    <Grid item>
-                        <Grid item xs={12}>
-                            <Sample
-                                height={style ? style.height : height}
-                                fontSize={style ? style.fontSize : fontSize}
-                                color={null}
-                                font={style ? style.font : font}
-                                fontWeight={style ? style.fontWeight : fontWeight}
-                                splitWords={null}
-                            >
-                                This is config mode.<br />
-                                SPLT is Proofreading tool.
-                            </Sample>
-                        </Grid>
+                
+                    <Grid item xs={12}>
+                        <Sample
+                            height={style ? style.height : height}
+                            fontSize={style ? style.fontSize : fontSize}
+                            color={null}
+                            font={style ? style.font : font}
+                            fontWeight={style ? style.fontWeight : fontWeight}
+                            splitWords={null}
+                        >
+                            This is config mode.<br />
+                            SPLT is Proofreading tool.
+                        </Sample>
                     </Grid>
                 </Grid>
             </>
@@ -459,6 +449,9 @@ let Dropdown = (props, ref) => {
                     <Tab onClick={handleClick} active={active === 3} value={"3"}>
                         SPLIT WORD
                     </Tab>
+                    <Tab onClick={handleClick} active={active === 4} value={"4"}>
+                       HELP
+                    </Tab>
                 </Tabs>
                 <ScrollBar>
                     <Content active={active === 1}>
@@ -477,6 +470,9 @@ let Dropdown = (props, ref) => {
                                     : init_splitWord
                             }
                         />
+                    </Content>
+                    <Content active={active === 4}>
+                        <Help />
                     </Content>
                 </ScrollBar>
             </LeftDiv>

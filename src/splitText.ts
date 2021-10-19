@@ -1,5 +1,5 @@
 export const splitText = (text: string, splitWords: string[]) => {
-    console.log(splitWords)
+
     const words: string[] = splitWords ? splitWords as string[] : [""]
     const splitSymbol = "(?<=[" + words.join("") + "])";
     const reg = new RegExp(splitSymbol, "igu")
