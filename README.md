@@ -16,6 +16,4 @@ Viewer &amp; Editor
 
 
 ## 導入
-- SPLT/dist をダウンロード。
-- chrome://extensions/　で「パッケージ化されていない拡張機能」をクリックし、ダウンロードしたファイルを選択。
-- ロード後、左クリックのコンテキストメニューにて起動可能。
+- https://chrome.google.com/webstore/detail/splt/nfjalncblbnljfaamgjelgmdfijkggok
