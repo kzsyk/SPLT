@@ -1,8 +1,11 @@
 # SPLT
 Viewer &amp; Editor 
 
+▼Download 
+https://chrome.google.com/webstore/detail/splt/nfjalncblbnljfaamgjelgmdfijkggok
+
 ## これは何
-  アクセシビリティを意識したテキストビュワー、ビュワーと同じスタイリングで編集できるエディタ、をテーマに制作中。
+  アクセシビリティを意識したテキストビュワー、ビュワーと同じスタイリングで編集できるエディタ、をテーマに制作。
   
 ![Videotogif (1)-min](https://user-images.githubusercontent.com/91081804/134041339-b4770001-a177-42be-bf90-4d1a866a9835.gif)
 
