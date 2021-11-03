@@ -196,9 +196,10 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 </Pstyle >
             }) : <p>no</p>
 
-    const callbackEdit = useCallback((isEditNow: boolean, ref, startPos: number) => {
+    const callbackEdit = (isEditNow: boolean, ref, startPos: number) => {
         setIsEdit(isEditNow);
         if (ref && isEditNow) {
+            console.log("isEditNow")
             if (window.getSelection() && window.getSelection().rangeCount > 0) {
                 const sel = window.getSelection()
                 const range = document.createRange()
@@ -210,15 +211,14 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 return
             }
         }
-    }, [isEdit])
+    }
 
-    const blur = useCallback((e, ref) => {
+    const blur =(e, ref) => {
         e.preventDefault()
-        callbackEdit(false, ref, 1);
+        callbackEdit(false, null, 0)
+    }
 
-    }, [isEdit])
-
-    const focus = useCallback((e, ref) => {
+    const focus = (e, ref) => {
         e.preventDefault()
         const bottom: number = ref.getBoundingClientRect().top + window.pageYOffset;
         focusStore(ref)
@@ -228,21 +228,21 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 behavior: "smooth"
             });
         }
-    }, [isEdit])
+    }
 
-    const click = useCallback((e, ref) => {
-        if (e.type === 'click') {
+    const click = (e, ref) => {
+        if(!isEdit){
             e.preventDefault()
-            setIsEdit(true)
-            ref.current.focus()
+            callbackEdit(true,ref.current,0);
+        }else {
+            return
         }
-    }, [isEdit])
+    }
 
-    const memo = (ref, select: number) => {
+    const focusSentence = (ref, select: number) => {
         const currentDom = ref.current[select]
         if (currentDom) {
             currentDom.current.focus()
-            //selectionShift(select)
             const bottom: number = currentDom.current.getBoundingClientRect().top + window.pageYOffset
             if (bottom > 500) {
                 currentDom.current.scrollIntoView({
@@ -253,54 +253,50 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
         }
     }
 
-    const handleKeyDown = useCallback((e, i, ref) => {
-        const pos = getCaretPos()
-        const count: number = ref.current[i].current.innerText.length
-        const isRightShift = (pos === count) ? true : false
-        const isLeftShift = (pos === 0) ? true : false
 
-        if (isRightShift) {
-            if (e.key === "ArrowRight") {
-                memo(ref, i + 1);
-                if (ref.current[i + 1]) {
-                    callbackEdit(true, ref.current[i + 1].current, 0);
+    const handleKeyDown = (e, i, ref) => {
+        if (e.key === "ArrowRight") {
+            if(isEdit){
+                const pos = getCaretPos()
+                const count: number = ref.current[i].current.innerText.length
+                if(pos===count){
+                    focusSentence(ref, i + 1);
+                    if (ref.current[i + 1]) {
+                        callbackEdit(true, ref.current[i + 1].current, 0);                    
+                    }
                 }
-            }
-        }
-
-        if (isLeftShift) {
-            if (e.key === "ArrowLeft") {
-                memo(ref, i - 1);
-                if (ref.current[i - 1]) {
-                    callbackEdit(true,
-                        ref.current[i - 1].current,
-                        ref.current[i - 1].current.innerText.length);
-                }
-            }
-        }
-
-        if (isEdit === false) {
-            if (e.key === "ArrowRight") {
+            }else{
                 e.preventDefault();
-
                 if (i === null) {
-                    memo(ref, 0);
+                    focusSentence(ref, 0);
                 } else {
-                    memo(ref, i + 1);
-                    //selectionShift(Math.min(textData.length - 1, selection + 1));
+                    focusSentence(ref, i + 1);  
                 }
                 e.stopPropagation();
             }
-            if (e.key === "ArrowLeft") {
-                e.preventDefault();
 
+        }
+        if (e.key === "ArrowLeft") {
+            if(isEdit){
+                const pos = getCaretPos()
+                if (pos === 0){
+                    focusSentence(ref, i - 1);
+                    if (ref.current[i - 1]) {
+                        callbackEdit(true,
+                            ref.current[i - 1].current,
+                            ref.current[i - 1].current.innerText.length);
+                    }
+                }
+            }else{
+                e.preventDefault();
                 if (i === null) {
-                    memo(ref, 0);
+                    focusSentence(ref, 0);
                 } else {
-                    memo(ref, i - 1);
+                    focusSentence(ref, i - 1);
                 }
             }
         }
+
 
         if (e.key === "Escape") {
             e.preventDefault();
@@ -314,7 +310,7 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 e.stopPropagation();
             }
         }
-    }, [isEdit]);
+    };
 
     const editText = async () => {
         const inspector = new DomInspector();
