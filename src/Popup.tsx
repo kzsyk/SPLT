@@ -10,13 +10,13 @@ import { ConfigMenu } from "./ConfigMenu"
 import { StyleContextProvider } from "./Context"
 import { useGlobalState } from "./Context"
 
+import {ExitButton} from "./ExitButton"
 //import { NewWindow } from "./NewWindow"
 
 type ModalBackground = {
     isOpen: boolean;
     backgroundColor: string
 }
-
 
 const Background = styled.div<ModalBackground>`
     background-color: ${props => props.backgroundColor};
@@ -71,7 +71,7 @@ export const ContentComponent: React.FC = () => {
                     height={show ? "100vh" : "0%"}
                     color={global.color ? global.color["modal"]:"white"}
                 >
-
+                   
                     <SelectText
                         updateState={useMemo(() => updateState, [])}
                     />
@@ -85,6 +85,9 @@ export const ContentComponent: React.FC = () => {
                     }} 
                     */
                 />
+                <ExitButton 
+                        cancel={()=>setShow(false)}
+                    />
                 </FocusLock >
             </Background >
     </>

@@ -120,7 +120,6 @@ let Dropdown = (props, ref) => {
             chrome.storage.sync.get(["splt_styles"], async (result) => {
                 if (!result) return
                 const init: Style = await result["splt_styles"];
-                console.log("ummount")
                 updateValue("", init, "")
             });
         }
@@ -165,7 +164,6 @@ let Dropdown = (props, ref) => {
                     if (!result) { updateValue("", init_dammy, "") }
                     else {
                         const init: Style = await result["splt_styles"];
-                        console.log(init)
                         callback(init)
                         updateValue("", init, "")
                     }
@@ -174,10 +172,8 @@ let Dropdown = (props, ref) => {
         };
         f();
         const cleanup = () => {
-            console.log(style.color)
             unmounted = true;
         };
-        console.log("crean up")
         return cleanup;
     }, [])
 
@@ -200,7 +196,6 @@ let Dropdown = (props, ref) => {
         newValue: number | string | string[] | Style,
         type: string
     ) => {
-        console.log(style);
         if (name === "fontSize") {
             setStyle({ ...style, fontSize: newValue as number })
         } else if (name === "height") {
@@ -214,11 +209,9 @@ let Dropdown = (props, ref) => {
             colorPart[type] = newValue as string
             setStyle({ ...style, color: colorPart })
         } else if (name === "splitWords") {
-            console.log(newValue)
             setStyle({ ...style, splitWords: newValue as string[] })
         } else {
             const init = newValue as Style
-            console.log(init)
             setStyle(init)
         }
     }, [style]);
@@ -229,8 +222,8 @@ let Dropdown = (props, ref) => {
                 <Grid container spacing={10} >
                     <Grid item >
                         <div>
-                            <Typography id="Font Color" gutterBottom>
-                                Font Color
+                            <Typography id="Blur Color" gutterBottom>
+                                Blur Color
                             </Typography>
                             <Grid item xs={1}>
                                 <ColorPicker
@@ -245,27 +238,10 @@ let Dropdown = (props, ref) => {
                         </div>
                     </Grid>
 
-                    <Grid item >
-                        <div>
-                            <Typography id="Modal" gutterBottom>
-                                Modal
-                            </Typography>
-                            <Grid item xs={1}>
-                                <ColorPicker
-                                    dispatchCol={(color: string) => {
-                                        styleChange("color", color, "modal")
-                                    }}
-                                    initial={
-                                        style.color ? style.color.modal : init_color["modal"]
-                                    }
-                                />
-                            </Grid>
-                        </div>
-                    </Grid>
                     <Grid item>
                         <div>
-                            <Typography id="Highlight" gutterBottom>
-                                Highlight
+                            <Typography id="Focus Color" gutterBottom>
+                               Focus Color
                             </Typography>
                             <Grid item xs={1}>
                                 <ColorPicker
@@ -281,8 +257,8 @@ let Dropdown = (props, ref) => {
                     </Grid>
                     <Grid item >
                         <div>
-                                <Typography id="shadow" gutterBottom>
-                                    shadow
+                                <Typography id="Text Shadow" gutterBottom>
+                                    Text Shadow
                                 </Typography>
                                 <Grid item xs={1}>
                                     <ColorPicker
@@ -296,23 +272,40 @@ let Dropdown = (props, ref) => {
                                 </Grid>
                         </div>
                     </Grid>
+                    <Grid item >
+                        <div>
+                            <Typography id="Textarea Modal" gutterBottom>
+                                Textarea Modal 
+                            </Typography>
+                            <Grid item xs={1}>
+                                <ColorPicker
+                                    dispatchCol={(color: string) => {
+                                        styleChange("color", color, "modal")
+                                    }}
+                                    initial={
+                                        style.color ? style.color.modal : init_color["modal"]
+                                    }
+                                />
+                            </Grid>
+                        </div>
+                    </Grid>
 
                     <Grid item>
-                            <div>
-                                <Typography id="BackgroundModal" gutterBottom>
-                                    BackgroundModal
-                                </Typography>
-                                <Grid item xs={1}>
-                                    <ColorPicker
-                                        dispatchCol={(color: string) => {
-                                            styleChange("color", color, "backgroundModal")
-                                        }}
-                                        initial={
-                                            style.color ? style.color.backgroundModal : init_color["backgroundModal"]
-                                        }
-                                    />
-                                </Grid>
-                            </div>
+                        <div>
+                            <Typography id="Background Modal" gutterBottom>
+                                Background Modal
+                            </Typography>
+                            <Grid item xs={1}>
+                                <ColorPicker
+                                    dispatchCol={(color: string) => {
+                                        styleChange("color", color, "backgroundModal")
+                                    }}
+                                    initial={
+                                        style.color ? style.color.backgroundModal : init_color["backgroundModal"]
+                                    }
+                                />
+                            </Grid>
+                        </div>
                     </Grid>
                 </Grid>
             </>
