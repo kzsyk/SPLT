@@ -35,19 +35,28 @@ const useStyles = makeStyles({
         margin: "3% 0 0 0", width: "100% ", height: "70% ", position: "fixed", zIndex: zIndexSearch() + 200, color: "black"
     },
     button: {
-        position: "fixed", opacity: 0.5, right: "10%", top: "10px", margin: "1%"
-    },
-    '&:hover': {
-        opacity: 1.0,
+        position: "fixed", opacity: 0.2, right: "10%", top: "10px", margin: "1%"
+        ,"&:hover, &:focus":{
+            opacity: 1.0
+        }
     },
     button_second: {
-        position: "fixed", opacity: 0.5, right: "10%", top: "60px", margin: "1%"
+        position: "fixed", opacity: 0.2, right: "10%", top: "60px", margin: "1%"
+        ,"&:hover, &:focus": {
+            opacity: 1.0
+        }
     },
     button_third: {
-        position: "fixed", opacity: 0.5, right: "10%", top: "110px", margin: "1%"
+        position: "fixed", opacity: 0.2, right: "10%", top: "110px", margin: "1%"
+        ,"&:hover, &:focus": {
+            opacity: 1.0
+        }
     },
-    button_fouth: {
-        position: "fixed", opacity: 0.5, right: "10%", top: "160px", margin: "1%"
+    button_fourth: {
+        position: "fixed", opacity: 0.2, right: "10%", top: "160px", margin: "1%"
+        ,"&:hover, &:focus": {
+            opacity: 1.0
+        }
     },
     tips: {
         margin: "1%", zIndex: zIndexSearch() + 1000
@@ -59,29 +68,22 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
     const [isConfigOpen, setIsConfigOpen] = useState<boolean>(isOpen)
     const classes = useStyles();
     const [dialogOpen, setDialogOpen] = useState<boolean>(false)
-    const [helpOpen, setHelpOpen] = useState<boolean>(false)
     const open = isOpen
 
-    const setConfigOpen = useCallback(() => {
+    const setConfigOpen = () => {
         setIsConfigOpen(prev => !prev);
         focusReturn()
-    }, [])
+    }
 
     const handleClose = useCallback(() => {
         setDialogOpen(false);
-        setHelpOpen(false);
+        
     }, []);
 
     const copyAndClipboard = useCallback(() => {
         const text = document.getElementById('spltText').innerText;
         navigator.clipboard.writeText(text)
         setDialogOpen(true)
-        focusReturn()
-    }, [])
-
-
-    const showHelp = useCallback(() => {
-        setHelpOpen(true)
         focusReturn()
     }, [])
 
@@ -97,6 +99,7 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
             setIsConfigOpen(false)
         }
     }, [open])
+    
 
     return (
 
@@ -127,7 +130,11 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
                 </IconButton>
             </ConfigButton >
 
-            <ConfigModal isOpen={isConfigOpen} color="rgba(240,240,240,.9)">
+            <ConfigModal
+                isClose={()=>setIsConfigOpen(false)} 
+                isOpen={isConfigOpen} 
+                color="rgba(240,240,240,.9)"
+            >
                 <Dropdown isOpen={open} ref={renewRef} />
             </ConfigModal>
 
@@ -168,7 +175,7 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
             </Dialog>
 
             {/* 
-            <ConfigButton className={classes.button_fouth} isOpen={open} tabIndex={open ? -1 : null}>
+            <ConfigButton className={classes.button_fourth} isOpen={open} tabIndex={open ? -1 : null}>
                 {!isConfigOpen ?
                     <IconButton
                         color="primary"
