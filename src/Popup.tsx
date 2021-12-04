@@ -86,8 +86,8 @@ export const ContentComponent: React.FC = () => {
                     */
                 />
                 <ExitButton 
-                        cancel={()=>setShow(false)}
-                    />
+                    cancel={()=>setShow(false)}
+                />
                 </FocusLock >
             </Background >
     </>

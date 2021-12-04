@@ -26,6 +26,7 @@ const CustomModal = styled(Modal)`
 type confModal = {
     children: JSX.Element;
     isOpen: boolean;
+    isClose: () => void;
     color: string;
 }
 
@@ -50,6 +51,7 @@ export const ConfigModal = (props: confModal) => {
         if (isOpen && e.key === "Escape") {
             e.preventDefault();
             setModalState(false)
+            props.isClose()
             e.stopPropagation();
         }
     }

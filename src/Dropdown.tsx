@@ -84,8 +84,7 @@ let Dropdown = (props, ref) => {
     const height = 1.5
     const font = "メイリオ"
     const fontWeight = 150
-    const init_splitWord: string[] = ["、", "。", "」", "?", "!", ",", ")"]
-
+    const init_splitWord: string[] = ["、", "。",",","."]
 
     const init_color = {
         "fontColor": "rgba(200,200,200,.3)",
@@ -108,47 +107,31 @@ let Dropdown = (props, ref) => {
     const [active, setActive] = useState<number>(1);
     const handleClick = e => {
         const index = parseInt(e.currentTarget.value, 0);
-
         if (index) {
             setActive(index);
         }
     };
 
-
     useImperativeHandle(ref, () => ({
         autoRenew: () => {
             chrome.storage.sync.get(["splt_styles"], async (result) => {
                 if (!result) return
-                const init: Style = await result["splt_styles"];
+                const init: Style = result["splt_styles"];
                 updateValue("", init, "")
             });
         }
     }));
 
 
-    const [style, setStyle] = useState<Style>({
-        fontSize: 14,
-        height: 1.5,
-        font: "メイリオ",
-        fontWeight: 150,
-        color: {
-            fontColor: "rgba(200,200,200,.3)",
-            modal: "rgba(240,240,250,1)",
-            highlight: "rgba(0,0,0,1)",
-            shadow: "rgba(0,0,0,.5)",
-            backgroundModal: "rgba(240,240,250,1)"
-        },
-        splitWords: init_splitWord
-    })
-
+    const [style, setStyle] = useState<Style>(init_dammy)
     const callback = (value) => {setStyle(value)}
 
     useEffect(() => {
-        if (isOpen === true) {
-            if (style) {
-                updateValue("", style, "")
-            }
-        } else return
+        if (style) {
+            console.log(style)
+            updateValue("", style, "")
+       }
+
     }, [isOpen])
 
     useEffect(() => {
@@ -173,6 +156,8 @@ let Dropdown = (props, ref) => {
         f();
         const cleanup = () => {
             unmounted = true;
+            console.log(style);
+            updateValue("", style, "");
         };
         return cleanup;
     }, [])
@@ -454,14 +439,13 @@ let Dropdown = (props, ref) => {
                         <ColorStyle />
                     </Content>
                     <Content active={active === 3}>
-                        <TagsForm dispatchCol={(tags: string[]) => {
-                            styleChange("splitWords", tags, "_")
-                        }}
-                            initial={
-                                style.splitWords
-                                    ? style.splitWords
-                                    : init_splitWord
-                            }
+                        <TagsForm 
+                            dispatchSplit={
+                                (tags: string[]) => {
+                                    styleChange("splitWords", tags, "_")
+                                    console.log("done "+ tags)
+                            }}
+                            splitSymbol={style.splitWords}
                         />
                     </Content>
                     <Content active={active === 4}>
