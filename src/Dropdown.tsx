@@ -84,7 +84,7 @@ let Dropdown = (props, ref) => {
     const height = 1.5
     const font = "メイリオ"
     const fontWeight = 150
-    const init_splitWord: string[] = ["、", "。",",","."]
+    const init_splitWord: string[] = ["、", "。","."]
 
     const init_color = {
         "fontColor": "rgba(200,200,200,.3)",
@@ -121,10 +121,7 @@ let Dropdown = (props, ref) => {
             });
         }
     }));
-
-
     const [style, setStyle] = useState<Style>(init_dammy)
-    const callback = (value) => {setStyle(value)}
 
     useEffect(() => {
         if (style) {
@@ -146,7 +143,9 @@ let Dropdown = (props, ref) => {
                     if (!result) { updateValue("", init_dammy, "") }
                     else {
                         const init: Style = await result["splt_styles"];
-                        callback(init)
+                        console
+                        setStyle(init)
+                        console.log(init)
                         updateValue("", init, "")
                     }
                 });
@@ -442,7 +441,7 @@ let Dropdown = (props, ref) => {
                                 (tags: string[]) => {
                                     styleChange("splitWords", tags, "_")
                             }}
-                            splitSymbol={style.splitWords}
+                            splitSymbol={style.splitWords?style.splitWords:init_splitWord}
                         />
                     </Content>
                     <Content active={active === 4}>
