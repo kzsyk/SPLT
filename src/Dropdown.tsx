@@ -103,7 +103,7 @@ let Dropdown = (props, ref) => {
         splitWords: init_splitWord
     }
 
-    const [isOpen, setIsOpen] = useState<boolean>(props.isOpen);
+    const isOpen = props.isOpen;
     const [active, setActive] = useState<number>(1);
     const handleClick = e => {
         const index = parseInt(e.currentTarget.value, 0);
@@ -128,7 +128,6 @@ let Dropdown = (props, ref) => {
 
     useEffect(() => {
         if (style) {
-            console.log(style)
             updateValue("", style, "")
        }
 
@@ -156,7 +155,6 @@ let Dropdown = (props, ref) => {
         f();
         const cleanup = () => {
             unmounted = true;
-            console.log(style);
             updateValue("", style, "");
         };
         return cleanup;
@@ -212,7 +210,7 @@ let Dropdown = (props, ref) => {
                             </Typography>
                             <Grid item xs={1}>
                                 <ColorPicker
-                                    dispatchCol={(color: string) => {
+                                    dispatchColor={(color: string) => {
                                         styleChange("color", color, "fontColor")
                                     }}
                                     initial={
@@ -230,7 +228,7 @@ let Dropdown = (props, ref) => {
                             </Typography>
                             <Grid item xs={1}>
                                 <ColorPicker
-                                    dispatchCol={(color: string) => {
+                                    dispatchColor={(color: string) => {
                                         styleChange("color", color, "highlight")
                                     }}
                                     initial={
@@ -247,7 +245,7 @@ let Dropdown = (props, ref) => {
                                 </Typography>
                                 <Grid item xs={1}>
                                     <ColorPicker
-                                        dispatchCol={(color: string) => {
+                                        dispatchColor={(color: string) => {
                                             styleChange("color", color, "shadow")
                                         }}
                                         initial={
@@ -264,7 +262,7 @@ let Dropdown = (props, ref) => {
                             </Typography>
                             <Grid item xs={1}>
                                 <ColorPicker
-                                    dispatchCol={(color: string) => {
+                                    dispatchColor={(color: string) => {
                                         styleChange("color", color, "modal")
                                     }}
                                     initial={
@@ -282,7 +280,7 @@ let Dropdown = (props, ref) => {
                             </Typography>
                             <Grid item xs={1}>
                                 <ColorPicker
-                                    dispatchCol={(color: string) => {
+                                    dispatchColor={(color: string) => {
                                         styleChange("color", color, "backgroundModal")
                                     }}
                                     initial={
@@ -443,7 +441,6 @@ let Dropdown = (props, ref) => {
                             dispatchSplit={
                                 (tags: string[]) => {
                                     styleChange("splitWords", tags, "_")
-                                    console.log("done "+ tags)
                             }}
                             splitSymbol={style.splitWords}
                         />

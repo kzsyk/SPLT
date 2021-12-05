@@ -64,7 +64,7 @@ export const initStorage: storageData = {
             shadow: "rgba(0,0,0,.5)",
             backgroundModal: "rgba(240,240,250,1)"
         },
-        splitWords: ["、", "。", "」", "?", "⏎", "!", ",", ")", "・"]
+        splitWords: ["。"]
     }
 }
 
@@ -78,8 +78,6 @@ export const getData = async () => {
         }
     });
 }
-
-getData()
 
 export const reducerFunc = (state: StyleState, action: StyleAction) => {
     switch (action.type) {
@@ -95,3 +93,5 @@ export const reducerFunc = (state: StyleState, action: StyleAction) => {
     }
 
 };
+
+getData()

@@ -1,6 +1,5 @@
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { splitText } from './splitText'
 import { getCaretPos } from './util'
 import DomInspector from 'dom-inspector';
 import styled from 'styled-components';
@@ -58,7 +57,7 @@ const TextRenderArea = styled.div<TextComponent>`
 
 
 export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }> = ({ updateState }) => {
-    const listRef = useRef([]);
+    let listRef = useRef([]);
     const areaRef = useRef(null);
     const [textData, getTextData] = useState<TextData>({
         sumWord: 0,
@@ -66,109 +65,72 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
     });
     const global = useGlobalState()
     let globalSplitWords = global.splitWords
-    const [splitWords, getSplitWords] = useState<string[]>(globalSplitWords);
+    const [splitWords, setSplitWords] = useState<string[]>(null);
     const [rawText, setRawText] = useState<string>(null);
     const [text, setText] = useState<string[]>(null);
-    const [isEdit, setIsEdit] = useState(false);
+    const [isEdit, setIsEdit] = useState<boolean>(false);
 
-    const setTextOnce = useCallback((text: string[]) => {
-        text ? setText(text) : null
+    let sentence = text ? text.map((result, index) => {
+        //const getColor = () => Math.floor(Math.random() * 255)
+        /* 
+        const style = {
+            color: `rgb(${getColor()},${getColor()},${getColor()})`,
+        }
+        */
+        return <Pstyle
+            key={String(index)}
+            ref={listRef.current[index]}
+            tabIndex={isEdit ? 1 : 0}
+            //style={style}
+            data-index={index}
+            onKeyDown={(e) => handleKeyDown(e, index, listRef)}
+            onClick={(e) => click(e, listRef.current[index])}
+            onMouseDown={(e) => click(e, listRef.current[index])}
+            onBlur={(e) => blur(e)}
+            onFocus={(e) => focus(e, listRef.current[index].current)}
 
+            contentEditable={isEdit}
+            suppressContentEditableWarning={true}
+            blurFontColor={global.color?global.color["fontColor"]:"gray"}
+            focusFontColor={global.color?global.color["highlight"]:"black"}
+            shadow={global.color?global.color["shadow"]:"gray"}
+        >
+            {result}
+        </Pstyle >
+    }) : <p>no</p>
+
+    useEffect(() => {
+        if (splitWords) {
+            const splitWords = global.splitWords
+            setSplitWords(splitWords)
+            const currentText = document.getElementById("spltText").innerText
+            const split = splitText(currentText)
+            setText(split)
+        }
     }, [])
 
-    const setSplitWords = useCallback((value) => {
-        value ? getSplitWords(value) : null
-    }, [])
+    useEffect(() => {
+        if(rawText){
+            setText(splitText(rawText))
+        }
+    }, [rawText])
 
     useEffect(() => {
         if (globalSplitWords) {
             setSplitWords(globalSplitWords)
             const currentText = document.getElementById("spltText").innerText
-            const split = splitText(currentText, globalSplitWords)
-            setTextOnce(split)
+            setText(splitText(currentText))
         }
     }, [globalSplitWords])
 
     useEffect(() => {
         if (text) {
-            text.forEach((_, i) => {
-                listRef.current[i] = React.createRef();
-            })
             getTextData({ sumWord: text.join(',').length, length: text.length })
+            text.forEach((_, i) => {listRef.current[i] = React.createRef();})
             areaRef.current.focus();
-            sentence = text ?
-                text.map((result, index) => {
-                    const getColor = () => Math.floor(Math.random() * 255)
-                    /* 
-                    const style = {
-                        color: `rgb(${getColor()},${getColor()},${getColor()})`,
-                    }
-                    */
-                    return <Pstyle
-                        key={String(index)}
-                        ref={listRef.current[index]}
-                        tabIndex={isEdit ? 1 : 0}
-                        //style={style}
-                        data-index={index}
-                        onKeyDown={(e) => handleKeyDown(e, index, listRef)}
-                        onClick={(e) => click(e, listRef.current[index])}
-                        onMouseDown={(e) => click(e, listRef.current[index])}
-                        onBlur={(e) => blur(e, listRef.current[index].current)}
-                        onFocus={(e) => focus(e, listRef.current[index].current)}
-
-                        contentEditable={isEdit}
-                        suppressContentEditableWarning={true}
-                        blurFontColor={global.color?global.color["fontColor"]:"gray"}
-                        focusFontColor={global.color?global.color["highlight"]:"black"}
-                        shadow={global.color?global.color["shadow"]:"gray"}
-                    >
-                        {result}
-                    </Pstyle >
-                }) : <p>no</p>
-        }
-    }, [text])
-
-
-    useEffect(() => {
-        chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-            sendResponse()
-            if (request.message === 'select') {
-                if (!request.text) {
-                    await editText()
-                } else {
-                    const text = rawText
-                    const split = splitText(text, splitWords)
-                    setTextOnce(split)
-                    getTextData({ ...textData, sumWord: text.length })
-                }
-            } else if (request.message === 'paste') {
-                if (navigator.clipboard) {
-                    const pasteArea = document.createElement("textarea");
-                    pasteArea.focus();
-                    navigator.clipboard.readText()
-                        .then(function (text) {
-                            pasteArea.textContent = text;
-                            const textContent = pasteArea.textContent
-                            const split = splitText(textContent, splitWords)
-                            setTextOnce(split)
-                            getTextData({ ...textData, sumWord: text.length })
-                            updateState(true)
-                        });
-                    pasteArea.parentNode.removeChild(pasteArea);
-                } else {
-                    alert("cannot use clipboard in this browser")
-                }
-            }
-            return true
-        })
-    }, []);
-
-
-
-    let sentence =
-        text ?
-            text.map((result, index) => {
-                const getColor = () => Math.floor(Math.random() * 255)
+            sentence = text ? text.map((result, index) => {
+                listRef.current[index] = React.createRef();
+                //const getColor = () => Math.floor(Math.random() * 255)
                 /* 
                 const style = {
                     color: `rgb(${getColor()},${getColor()},${getColor()})`,
@@ -183,9 +145,9 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                     onKeyDown={(e) => handleKeyDown(e, index, listRef)}
                     onClick={(e) => click(e, listRef.current[index])}
                     onMouseDown={(e) => click(e, listRef.current[index])}
-                    onBlur={(e) => blur(e, listRef.current)}
+                    onBlur={(e) => blur(e)}
                     onFocus={(e) => focus(e, listRef.current[index].current)}
-
+        
                     contentEditable={isEdit}
                     suppressContentEditableWarning={true}
                     blurFontColor={global.color?global.color["fontColor"]:"gray"}
@@ -194,12 +156,56 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 >
                     {result}
                 </Pstyle >
-            }) : <p>no</p>
+        }) : <p>no</p>
+        }
+    }, [text])
+
+
+    useEffect(() => {
+        chrome.runtime.onMessage.addListener(async(request, sender, sendResponse) => {
+            sendResponse()
+            if (request.message === 'select') {
+                if (!request.text) {
+                    await SelectText()
+                } else {
+                    const text = rawText
+                    setText(splitText(text))
+                    getTextData({ ...textData, sumWord: text.length })
+                }
+            } else if (request.message === 'paste') {
+                if (navigator.clipboard) {
+                    const pasteArea = document.createElement("textarea");
+                    pasteArea.focus();
+                    navigator.clipboard.readText()
+                        .then(function (text) {
+                            pasteArea.textContent = text;
+                            const textContent = pasteArea.textContent
+                            const split = splitText(textContent)
+                            setText(split)
+                            getTextData({ ...textData, sumWord: text.length })
+                            updateState(true)
+                        });
+                    pasteArea.parentNode.removeChild(pasteArea);
+                } else {
+                    alert("cannot use clipboard in this browser")
+                }
+            }
+            return true
+        })
+    }, []);
+
+    const splitText = (text: string) => {
+        const splitSymbol = "(?<=[" + globalSplitWords.join("") + "])";
+        const reg = new RegExp(splitSymbol, "igu")
+        const sendText = text ? text : document.getElementById('spltText').innerText;
+        const splitList = sendText.split(reg)
+        return splitList
+    }
+
 
     const callbackEdit = (isEditNow: boolean, ref, startPos: number) => {
         setIsEdit(isEditNow);
         if (ref && isEditNow) {
-            console.log("isEditNow")
             if (window.getSelection() && window.getSelection().rangeCount > 0) {
                 const sel = window.getSelection()
                 const range = document.createRange()
@@ -213,20 +219,22 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
         }
     }
 
-    const blur =(e, ref) => {
+    const blur =(e) => {
         e.preventDefault()
         callbackEdit(false, null, 0)
     }
 
     const focus = (e, ref) => {
         e.preventDefault()
-        const bottom: number = ref.getBoundingClientRect().top + window.pageYOffset;
-        focusStore(ref)
-        if (bottom > 500) {
-            ref.scrollIntoView({
-                block: 'center',
-                behavior: "smooth"
-            });
+        if(ref){
+            const bottom: number = ref.getBoundingClientRect().top + window.pageYOffset;
+            focusStore(ref)
+            if (bottom > 500) {
+                ref.scrollIntoView({
+                    block: 'center',
+                    behavior: "smooth"
+                });
+            }
         }
     }
 
@@ -234,12 +242,11 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
         if(!isEdit){
             e.preventDefault()
             callbackEdit(true,ref.current,0);
-        }else {
-            return
         }
     }
 
     const focusSentence = (ref, select: number) => {
+        if(!ref.current[select]) return
         const currentDom = ref.current[select]
         if (currentDom) {
             currentDom.current.focus()
@@ -274,12 +281,13 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 }
                 e.stopPropagation();
             }
-
         }
+
         if (e.key === "ArrowLeft") {
             if(isEdit){
                 const pos = getCaretPos()
                 if (pos === 0){
+                    
                     focusSentence(ref, i - 1);
                     if (ref.current[i - 1]) {
                         callbackEdit(true,
@@ -297,7 +305,6 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
             }
         }
 
-
         if (e.key === "Escape") {
             e.preventDefault();
             updateState(false)
@@ -312,41 +319,54 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
         }
     };
 
-    const editText = async () => {
+    const SelectText = async() => {
+        let isCanceled = false
+        let isSelected = false
         const inspector = new DomInspector();
         inspector.enable()
+        document.addEventListener("keyup",  function cancel(e) {
+            if(isSelected) {
+                document.removeEventListener("keyup", cancel, false);
+                return true
+            }
+            if (e.key==="Escape") {
+                document.removeEventListener("keyup", cancel, false);
+                inspector.disable();
+                inspector.destroy();
+                isCanceled = true
+                return true
+            }
+        })
+        
         document.addEventListener("click", async function domselect(e) {
+            if(isCanceled) {
+                document.removeEventListener("click", domselect, false);
+                return true
+            }
+            isSelected = true
             const elm = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement
             const domText = elm.innerText
             setRawText(domText)
-            const textArray =
-                splitText(domText, splitWords)
-            if (textArray.length === 0) {
-                alert("This is not textContent dom. Or width size is not enough");
-                inspector.disable();
-                inspector.destroy();
-            } else {
-                setTextOnce(textArray)
-                inspector.disable()
-                inspector.destroy()
-                updateState(true)
-            }
+            //　*** splitword error ***
+            inspector.disable()
+            inspector.destroy()
+            updateState(true)
             document.removeEventListener("click", domselect, false);
-        });
-        return true;
+        })
+        return true   
     }
 
     return <TextRenderArea
-        ref={areaRef}
-        tabIndex={-1}
-        fontSize={global.fontSize as number}
-        height={global.height as number}
-        font={global.font as string}
-        fontWeight={global.fontWeight as number}
-    >
-        <div id="spltText">
-            {sentence}
-        </div>
-    </TextRenderArea >
+                ref={areaRef}
+                tabIndex={-1}
+                fontSize={global.fontSize as number}
+                height={global.height as number}
+                font={global.font as string}
+                fontWeight={global.fontWeight as number}
+            >
+                <div id="spltText">
+                    {sentence}
+                </div>
+            </TextRenderArea >
 
 };
