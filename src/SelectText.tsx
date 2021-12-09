@@ -65,7 +65,6 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
     });
     const global = useGlobalState()
     let globalSplitWords = global.splitWords
-    const [splitWords, setSplitWords] = useState<string[]>(null);
     const [rawText, setRawText] = useState<string>(null);
     const [text, setText] = useState<string[]>(null);
     const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -100,24 +99,20 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
     }) : <p>no</p>
 
     useEffect(() => {
-        if (splitWords) {
-            const splitWords = global.splitWords
-            setSplitWords(splitWords)
-            const currentText = document.getElementById("spltText").innerText
-            const split = splitText(currentText)
-            setText(split)
-        }
+        const currentText = document.getElementById("spltText").innerText
+        const split = splitText(currentText)
+        setText(split)
     }, [])
 
     useEffect(() => {
         if(rawText){
             setText(splitText(rawText))
+
         }
     }, [rawText])
 
     useEffect(() => {
         if (globalSplitWords) {
-            setSplitWords(globalSplitWords)
             const currentText = document.getElementById("spltText").innerText
             setText(splitText(currentText))
         }
@@ -156,7 +151,8 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 >
                     {result}
                 </Pstyle >
-        }) : <p>no</p>
+        }) 
+        : <p>no</p>
         }
     }, [text])
 
@@ -166,7 +162,7 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
             sendResponse()
             if (request.message === 'select') {
                 if (!request.text) {
-                    await SelectText()
+                    await selectDom()
                 } else {
                     const text = rawText
                     setText(splitText(text))
@@ -179,13 +175,17 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                     navigator.clipboard.readText()
                         .then(function (text) {
                             pasteArea.textContent = text;
-                            const textContent = pasteArea.textContent
-                            const split = splitText(textContent)
-                            setText(split)
+                            setText(splitText(pasteArea.textContent))
+                            setRawText(pasteArea.textContent)
                             getTextData({ ...textData, sumWord: text.length })
                             updateState(true)
+                            if(listRef.current[0].current){
+                                listRef.current[0].current.focus()
+                            }
                         });
-                    pasteArea.parentNode.removeChild(pasteArea);
+                        
+                    if(pasteArea.parentNode) pasteArea.parentNode.removeChild(pasteArea)
+                             
                 } else {
                     alert("cannot use clipboard in this browser")
                 }
@@ -195,7 +195,7 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
     }, []);
 
     const splitText = (text: string) => {
-        const splitSymbol = "(?<=[" + globalSplitWords.join("") + "])";
+        const splitSymbol = "(?<=[" + global.splitWords.join("") + "])";
         const reg = new RegExp(splitSymbol, "igu")
         const sendText = text ? text : document.getElementById('spltText').innerText;
         const splitList = sendText.split(reg)
@@ -319,7 +319,7 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
         }
     };
 
-    const SelectText = async() => {
+    const selectDom = async() => {
         let isCanceled = false
         let isSelected = false
         const inspector = new DomInspector();
@@ -338,9 +338,9 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
             }
         })
         
-        document.addEventListener("click", async function domselect(e) {
+        document.addEventListener("click", async function select(e) {
             if(isCanceled) {
-                document.removeEventListener("click", domselect, false);
+                document.removeEventListener("click", select, false);
                 return true
             }
             isSelected = true
@@ -351,7 +351,10 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
             inspector.disable()
             inspector.destroy()
             updateState(true)
-            document.removeEventListener("click", domselect, false);
+            if(listRef.current[0].current){
+                listRef.current[0].current.focus()
+            }
+            document.removeEventListener("click", select, false);
         })
         return true   
     }

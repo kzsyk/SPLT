@@ -80,16 +80,16 @@ let Dropdown = (props, ref) => {
     const dispatch = useDispatch();
     const confRef = useRef();
 
-    const fontSize = 14
-    const height = 1.5
-    const font = "メイリオ"
+    const fontSize = 18
+    const height = 1.8
+    const font = `游明朝, "Yu Mincho", YuMincho`
     const fontWeight = 150
-    const init_splitWord: string[] = ["、", "。","."]
+    const init_splitWord: string[] = ["、", "。","」","』"]
 
     const init_color = {
-        "fontColor": "rgba(200,200,200,.3)",
-        "modal": "rgba(240,240,250,1)",
+        "fontColor": "rgba(200,200,200,.2)",
         "highlight": "rgba(0,0,0,1)",
+        "modal": "rgba(240,240,250,1)",
         "shadow": "rgba(0,0,0,.5)",
         "backgroundModal": "rgba(240,240,250,1)"
     }
@@ -126,8 +126,7 @@ let Dropdown = (props, ref) => {
     useEffect(() => {
         if (style) {
             updateValue("", style, "")
-       }
-
+        }
     }, [isOpen])
 
     useEffect(() => {
@@ -143,7 +142,6 @@ let Dropdown = (props, ref) => {
                     if (!result) { updateValue("", init_dammy, "") }
                     else {
                         const init: Style = await result["splt_styles"];
-                        console
                         setStyle(init)
                         console.log(init)
                         updateValue("", init, "")
@@ -371,21 +369,32 @@ let Dropdown = (props, ref) => {
                                     >
                                         <optgroup label="ALL PC">
                                             <option
-                                                value={`"メイリオ"`}
-
-                                            >メイリオ</option>
+                                                value={`Arial, arial`}
+                                            >
+                                                デフォルト
+                                            </option>
                                             <option
                                                 value={`游明朝, "Yu Mincho", YuMincho`}
-                                            >游明朝体</option>
+                                            >
+                                                游明朝体
+                                            </option>
                                             <option
                                                 value={`"Yu Gothic Medium, 游ゴシック Medium"`}
 
-                                            >游ゴシック Medium</option>
+                                            >
+                                                游ゴシック Medium
+                                            </option>
+                                            <option
+                                                value={`"メイリオ"`}
+                                            >
+                                                メイリオ
+                                            </option>
                                         </optgroup>
                                         <optgroup label="For MAC">
                                             <option
                                                 value={"Hiragino Kaku Gothic Pro, ヒラギノ角ゴ Pro"}
-                                            >ヒラギノ角ゴ Pro</option>
+                                            >ヒラギノ角ゴ Pro
+                                            </option>
                                         </optgroup>
                                     </Select>
                                 </Grid>
@@ -459,6 +468,7 @@ let Dropdown = (props, ref) => {
                         chrome.storage.sync.set({ splt_styles: style }, () => {
                             console.log("save");
                             console.dir(style)
+                            updateValue("", style, "")
                         })
                     }}
                 >
