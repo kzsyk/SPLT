@@ -7,11 +7,12 @@ module.exports = {
         selectText: path.join(__dirname, "src/SelectText.tsx"),
         background: path.join(__dirname, "src/background.ts"),
         splitText: path.join(__dirname, "src/splitText.ts"),
-        Modal: path.join(__dirname, "src/Modal.tsx"),
-        ConfigMenu: path.join(__dirname, "src/ConfigMenu.tsx"),
-        Dropdown: path.join(__dirname, "src/Dropdown.tsx"),
-        ScrollBar: path.join(__dirname, "src/ScrollBar.tsx"),
-        Context: path.join(__dirname, "src/Context.tsx")
+        modal: path.join(__dirname, "src/Modal.tsx"),
+        configMenu: path.join(__dirname, "src/ConfigMenu.tsx"),
+        dropdown: path.join(__dirname, "src/Dropdown.tsx"),
+        scrollBar: path.join(__dirname, "src/ScrollBar.tsx"),
+        context: path.join(__dirname, "src/Context.tsx"),
+        help: path.join(__dirname, "src/Help.tsx")
     },
     output: {
         path: path.join(__dirname, "dist/js"),
