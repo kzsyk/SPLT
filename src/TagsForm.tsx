@@ -17,7 +17,6 @@ export const TagsForm: React.VFC<{ dispatchSplit: ((state: string[]) => void), s
     return (
         <ReactTagInput
             tags={tags}
-            maxTags={100}
             placeholder="Type and press enter"
             editable={true}
             readOnly={false}

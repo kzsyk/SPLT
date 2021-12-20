@@ -80,4 +80,3 @@ chrome.contextMenus.create({
   title: "SPLT from Select",
   contexts: ["all"]
 });
-

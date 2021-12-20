@@ -27,40 +27,36 @@ const ConfigButton = styled.div<configType>`
     visibility: ${props => props.isOpen ? "visible" : "hidden"};
     overflow: "hidden";
     margin: 0; 
-    
 `
 
 const useStyles = makeStyles({
     root: {
-        margin: "3% 0 0 0", width: "100% ", height: "70% ", position: "fixed", zIndex: zIndexSearch() + 200, color: "black"
+        width: "100% ", height: "70% ", position: "fixed", zIndex: zIndexSearch() + 200, color: "black"
     },
     button: {
-        position: "fixed", opacity: 0.2, right: "10%", top: "10px", margin: "1%"
+        position: "fixed", opacity: 0.2, right: "10%", top: "10px"
         ,"&:hover, &:focus":{
             opacity: 1.0
         }
     },
     button_second: {
-        position: "fixed", opacity: 0.2, right: "10%", top: "60px", margin: "1%"
+        position: "fixed", opacity: 0.2, right: "10%", top: "60px" 
         ,"&:hover, &:focus": {
             opacity: 1.0
         }
     },
     button_third: {
-        position: "fixed", opacity: 0.2, right: "10%", top: "110px", margin: "1%"
+        position: "fixed", opacity: 0.2, right: "10%", top: "110px" 
         ,"&:hover, &:focus": {
             opacity: 1.0
         }
     },
     button_fourth: {
-        position: "fixed", opacity: 0.2, right: "10%", top: "160px", margin: "1%"
+        position: "fixed", opacity: 0.2, right: "10%", top: "160px"
         ,"&:hover, &:focus": {
             opacity: 1.0
         }
-    },
-    tips: {
-        margin: "1%", zIndex: zIndexSearch() + 1000
-    },
+    }
 });
 
 
@@ -76,8 +72,7 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
     }
 
     const handleClose = useCallback(() => {
-        setDialogOpen(false);
-        
+        setDialogOpen(false);   
     }, []);
 
     const copyAndClipboard = useCallback(() => {
@@ -89,11 +84,12 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
 
     const renewRef = useRef(null)
 
-    const onClickRenew = () => {
-        renewRef.current.autoRenew();
-        focusReturn()
-    };
-
+    /* 
+        const onClickRenew = () => {
+            renewRef.current.autoRenew();
+            focusReturn()
+        };
+    */
     useEffect(() => {
         if (!open) {
             setIsConfigOpen(false)
@@ -104,9 +100,9 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
     return (
 
         <div>
+ 
             <ConfigButton
                 isOpen={open}
-                tabIndex={open ? -1 : null}
             >
                 <IconButton
                     color="primary"
@@ -116,18 +112,12 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
                     }}
                     className={classes.button}
                 >
-
-                    {
+                 {
                         isConfigOpen
-                            ? <Tooltip className={classes.tips} title={"config"}>
-                                <CloseIcon aria-label="close" />
-                            </Tooltip>
-                            : <Tooltip className={classes.tips} title={"config"}>
-                                <SettingsIcon aria-label="config" />
-                            </Tooltip>
+                            ? <CloseIcon aria-label="close" />
+                            : <SettingsIcon aria-label="config" />
                     }
-
-                </IconButton>
+             </IconButton>
             </ConfigButton >
 
             <ConfigModal
@@ -137,22 +127,26 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
             >
                 <Dropdown isOpen={open} ref={renewRef} />
             </ConfigModal>
+                        
+            {/* 
+                        <ConfigButton className={classes.button_second} isOpen={open} tabIndex={open ? -1 : null}>
+                            <IconButton
+                                color="primary"
+                                component="span"
+                                onClick={() => {
+                                    onClickRenew()
+                                }}>
+                                <Tooltip
+                                    className={classes.tips} title={"load saved data"}>
+                                    <AutorenewIcon aria-label="AutorenewIcon" />
+                                </Tooltip>
+                            </IconButton>
+                        </ConfigButton >
+            */}
+            
 
-            <ConfigButton className={classes.button_second} isOpen={open} tabIndex={open ? -1 : null}>
-                <IconButton
-                    color="primary"
-                    component="span"
-                    onClick={() => {
-                        onClickRenew()
-                    }}>
-                    <Tooltip
-                        className={classes.tips} title={"load saved data"}>
-                        <AutorenewIcon aria-label="AutorenewIcon" />
-                    </Tooltip>
-                </IconButton>
-            </ConfigButton >
-
-            <ConfigButton className={classes.button_third} isOpen={open} tabIndex={open ? -1 : null}>
+          
+            <ConfigButton className={classes.button_second} isOpen={open}tabIndex={open ? -1 : null}>
                 {!isConfigOpen ?
                     <IconButton
                         color="primary"
@@ -160,10 +154,9 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
                         onClick={() => {
                             copyAndClipboard()
                         }}>
-                        <Tooltip className={classes.tips} title={"Clip Board"}>
+                        
                             <DescriptionIcon
                                 aria-label="clipboard" />
-                        </Tooltip>
                     </IconButton>
                     : null
                 }

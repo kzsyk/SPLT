@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
 type Tab = {
   active: boolean;
@@ -14,9 +14,8 @@ export const Tab = styled.button<Tab>`
   border: none;
   outline: none;
   cursor: pointer;
-  width: 32%;
+  width: 24%;
   position: relative;
-
   margin-right: 0.1em;
   font-size: 1em;
   border: ${props => (props.active ? "1px solid #ccc" : "")};
@@ -24,7 +23,6 @@ export const Tab = styled.button<Tab>`
   background-color: ${props => (props.active ? "white" : "lightgray")};
   height: ${props => (props.active ? "3em" : "2.6em; top:.4em")};
   transition: background-color 0.5s ease-in-out;
-
   :hover {
     background-color: white;
   }
@@ -33,5 +31,4 @@ export const Tab = styled.button<Tab>`
 export const Content = styled.div<Tab>`
   ${props => (props.active ? "" : "display:none")};
   padding:3em;
-
 `;

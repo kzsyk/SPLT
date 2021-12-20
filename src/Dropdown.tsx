@@ -37,7 +37,7 @@ interface Style {
 
 const useStyles = makeStyles({
     root: {
-        margin: "5% 0 0 2%", width: "96%", height: "70%", position: "fixed", zIndex: zIndexSearch() + 200, color: "black"
+        width: "96%", height: "70%", position: "fixed", zIndex: zIndexSearch() + 200, color: "black"
     },
     saveButton: {
         position: "fixed", opacity: 1, right: "30%", top: "90%", margin: "1%"

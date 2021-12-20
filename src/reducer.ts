@@ -53,16 +53,16 @@ export let storage: storageData;
 
 export const initStorage: storageData = {
     style: {
-        fontSize: 14,
-        height: 1.5,
-        font: "メイリオ",
+        fontSize: 18,
+        height: 1.8,
+        font:`游明朝, Yu Mincho, YuMincho`,
         fontWeight: 150,
         color: {
-            fontColor: "rgba(200,200,200,.4)",
-            modal: "rgba(240,240,250,1)",
-            highlight: "rgba(0,0,0,1)",
-            shadow: "rgba(0,0,0,.5)",
-            backgroundModal: "rgba(240,240,250,1)"
+            "fontColor": "rgba(200,200,200,.2)",
+            "highlight": "rgba(0,0,0,1)",
+            "modal": "rgba(240,240,250,1)",
+            "shadow": "rgba(0,0,0,.5)",
+            "backgroundModal": "rgba(240,240,250,1)"
         },
         splitWords: ["。"]
     }

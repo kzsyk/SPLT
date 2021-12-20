@@ -45,8 +45,7 @@ export const ContentComponent: React.FC = () => {
     useMemo(() => {
         if (show) {
             backfaceFixed(true);
-        }
-        else {
+        } else {
             backfaceFixed(false);
         }
     }, [show]);

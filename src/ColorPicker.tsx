@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { RgbaStringColorPicker } from "react-colorful";
 import useDebounce from "./UseDebounce";
 
-export const ColorPicker: React.VFC<{ dispatchCol: ((state: string) => void), initial: string }> = ({ dispatchCol, initial }) => {
+export const ColorPicker: React.VFC<{ dispatchColor: ((state: string) => void), initial: string }> = ({ dispatchColor, initial }) => {
     const [color, setColor] = useState<string>(initial)
     const [mounted, setIsMount] = useState<boolean>(false)
     const handleOnChange = (value: string) => {
@@ -13,25 +13,34 @@ export const ColorPicker: React.VFC<{ dispatchCol: ((state: string) => void), in
     const debouncedValue = useDebounce<string>(color, 200)
 
     useEffect(() => {
-        console.log(mounted)
         const f = () => {
             if (mounted) {
                 if (color === debouncedValue) {
-                    dispatchCol(debouncedValue)
+                    dispatchColor(debouncedValue)
                 } else {
-                    dispatchCol(color)
+                    dispatchColor(color)
                 }
             }
         }
         f();
         const cleanup = () => {
             setIsMount(true)
-            console.log("crean up")
         };
         return cleanup;
     }, [debouncedValue])
 
-
+    
+    useEffect(() => {
+        if (!mounted) {
+            if(initial){
+                setColor(initial)
+            }
+            const cleanup = () => {
+                setIsMount(true)
+            };
+            return cleanup;
+        }
+    }, [initial])
 
     return (
         <RgbaStringColorPicker

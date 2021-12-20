@@ -6,5 +6,5 @@ export const focusStore = (ref) => {
 }
 
 export const focusReturn = () => {
-    return list.slice(-1)[0] ? list.slice(-1)[0].focus() : null
+    return list.slice(-1)[0] ? list.slice(-1)[0].focus() : -1
 }
