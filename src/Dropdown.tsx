@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef, forwardRef, useImperat
 import styled from 'styled-components';
 
 import { Tabs, Tab, Content } from "./Tabs";
-import {Help}from"./Help";
+import {Help} from "./Help";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -367,12 +367,25 @@ let Dropdown = (props, ref) => {
                                         }}
                                         id="grouped-native-select"
                                     >
-                                        <optgroup label="ALL PC">
+                                        <optgroup label="PC">
                                             <option
-                                                value={`Arial, arial`}
+                                                value={`"Arial", "arial"`}
                                             >
-                                                デフォルト
+                                                Arial
                                             </option>
+                                            <option
+                                                value={`"Roboto"`}
+
+                                            >
+                                                Roboto
+                                            </option>
+                                            <option
+                                                value={`"メイリオ"`}
+                                            >
+                                                メイリオ
+                                            </option>
+                                        </optgroup>     
+                                        <optgroup label="Windows">
                                             <option
                                                 value={`游明朝, "Yu Mincho", YuMincho`}
                                             >
@@ -380,20 +393,26 @@ let Dropdown = (props, ref) => {
                                             </option>
                                             <option
                                                 value={`"Yu Gothic Medium, 游ゴシック Medium"`}
-
                                             >
-                                                游ゴシック Medium
+                                                游ゴシック
                                             </option>
-                                            <option
-                                                value={`"メイリオ"`}
-                                            >
-                                                メイリオ
-                                            </option>
+                                        
                                         </optgroup>
-                                        <optgroup label="For MAC">
+                                        <optgroup label="Mac OS">
+                                            <option
+                                                value={`"ヒラギノ明朝 ProN W2", "HiraMinProN-W2"`}
+                                            >
+                                                ヒラギノ明朝
+                                            </option>
                                             <option
                                                 value={"Hiragino Kaku Gothic Pro, ヒラギノ角ゴ Pro"}
-                                            >ヒラギノ角ゴ Pro
+                                            >
+                                                ヒラギノ角ゴ Pro
+                                            </option>
+                                            <option
+                                                value={`"HelveticaNeue"`}
+                                            >
+                                                HelveticaNeue
                                             </option>
                                         </optgroup>
                                     </Select>
