@@ -44,6 +44,7 @@ const Pstyle = styled.div<PtextColor>`
 
 const TextRenderArea = styled.div<TextComponent>`
     position: relative;
+    text-align: left;
     white-space: pre-wrap;
     overflow-wrap: word-wrap;
     margin:5%;
