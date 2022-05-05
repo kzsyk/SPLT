@@ -48,6 +48,7 @@ const TextRenderArea = styled.div<TextComponent>`
     white-space: pre-wrap;
     overflow-wrap: word-wrap;
     margin:5%;
+    padding-bottom:40%;
     background-color:${props => props.color};
     line-height: ${props => props.height};
     font-size: ${props => props.fontSize + "px"};
