@@ -64,7 +64,7 @@ export const initStorage: storageData = {
             "shadow": "rgba(0,0,0,.5)",
             "backgroundModal": "rgba(240,240,250,1)"
         },
-        splitWords: ["。"]
+        splitWords: ["。","."]
     }
 }
 

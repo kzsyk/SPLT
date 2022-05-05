@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect, useMemo,useCallback } from "react";
-import { getCaretPos } from 'util/util'
+import { getCaretPos } from './logics/utils'
 import DomInspector from 'dom-inspector';
 import styled from 'styled-components';
 import { useGlobalState } from "./Context"
@@ -196,17 +196,16 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
         })
     }, []);
 
-    const splitText = (text: string) => {
-        console.log(globalSplitWords)
+    const splitText = useCallback((text: string) => {
         const splitSymbol = "(?<=[" + globalSplitWords.join("") + "])";
         const reg = new RegExp(splitSymbol, "igu")
         const sendText = text ? text : document.getElementById('spltText').innerText;
         const splitList = sendText.split(reg)
         return splitList
-    }
+    },[globalSplitWords])
 
 
-    const callbackEdit = (isEditNow: boolean, ref, startPos: number) => {
+    const callbackEdit = useCallback((isEditNow: boolean, ref, startPos: number) => {
         setIsEdit(isEditNow);
         if (ref && isEditNow) {
             if (window.getSelection() && window.getSelection().rangeCount > 0) {
@@ -220,14 +219,14 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 return
             }
         }
-    }
+    },[setIsEdit])
 
-    const blur =(e) => {
+    const blur =useCallback((e) => {
         e.preventDefault()
         callbackEdit(false, null, 0)
-    }
+    },[callbackEdit])
 
-    const focus = (e, ref) => {
+    const focus = useCallback((e, ref) => {
         e.preventDefault()
         if(ref){
             const bottom: number = ref.getBoundingClientRect().top + window.pageYOffset;
@@ -239,16 +238,16 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 });
             }
         }
-    }
+    },[focusStore])
 
-    const click = (e, ref) => {
+    const click = useCallback((e, ref) => {
         if(!isEdit){
             e.preventDefault()
             callbackEdit(true,ref.current,0);
         }
-    }
+    },[callbackEdit])
 
-    const focusSentence = (ref, select: number) => {
+    const focusSentence = useCallback((ref, select: number) => {
         if(!ref.current[select]) return
         const currentDom = ref.current[select]
         if (currentDom) {
@@ -261,10 +260,10 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 });
             }
         }
-    }
+    },[])
 
 
-    const handleKeyDown = (e, i, ref) => {
+    const handleKeyDown = useCallback((e, i, ref) => {
         if (e.key === "ArrowRight") {
             if(isEdit){
                 const pos = getCaretPos()
@@ -320,7 +319,7 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 e.stopPropagation();
             }
         }
-    };
+    },[isEdit]);
 
     const selectDom = async() => {
         let isCanceled = false

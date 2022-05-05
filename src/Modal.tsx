@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import styled from 'styled-components';
 import { zIndexSearch } from './logics/utils'
 import { ScrollBar } from './ScrollBar';
@@ -38,9 +38,10 @@ export const Modal: React.FC<modalType> = (props: modalType) => {
     const ref = useRef(null);
     const [autoFocus, setAutoFocus] = useState(isOpen)
 
-    const isOpenModal = (isOpen: boolean) => {
+    const isOpenModal = useCallback((isOpen: boolean) => {
         setAutoFocus(isOpen)
-    }
+    },[setAutoFocus])
+    
     useEffect(() => {
         isOpenModal(props.isOpen)
         if (props.isOpen) {
