@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef,useMemo } from "react";
 import { ConfigModal } from './ConfigModal'
 import Setting from '.'
 import { zIndexSearch } from '../logics/utils'
@@ -64,7 +64,7 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
     const [isConfigOpen, setIsConfigOpen] = useState<boolean>(isOpen)
     const classes = useStyles();
     const [dialogOpen, setDialogOpen] = useState<boolean>(false)
-    const open = isOpen
+    const open = useMemo(()=>isOpen,[isOpen])
 
     const setConfigOpen = useCallback(() => {
         setIsConfigOpen(prev => !prev);

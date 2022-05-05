@@ -2,7 +2,7 @@
 const list: HTMLElement[] = [];
 
 export const focusStore = (ref) => {
-    if (ref) list.push(ref)
+    list.push(ref)
 }
 
 export const focusReturn = () => {

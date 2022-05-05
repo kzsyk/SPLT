@@ -1,11 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useMemo } from "react";
 import ReactDOM from "react-dom";
 
 export const NewWindow = ({ children, closeWindowPortal }) => {
     const externalWindow = useRef(
         window.open("", "", "width=600,height=00,left=200,top=200")
     );
-    const containerEl = document.createElement("div");
+    const containerEl = useMemo(()=>document.createElement("div"),[document]);
 
     useEffect(() => {
         const currentWindow = externalWindow.current;

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef,useMemo,useCallback } from "react";
 import { Modal } from "../Modal";
 import styled from 'styled-components';
 import {zIndexSearch} from '../logics/utils'
@@ -34,10 +34,10 @@ export const ConfigModal = (props: confModal) => {
 
     const [isOpen, setIsOpen] = useState(props.isOpen)
     //モーダルの色の調整
-    const color = props.color
-    const setModalState = (bool: boolean) => {
+    const color = useMemo(()=>props.color,[props])
+    const setModalState = useCallback((bool: boolean) => {
         setIsOpen(bool);
-    }
+    },[setIsOpen])
     const ref = useRef(null);
 
     useEffect(() => {

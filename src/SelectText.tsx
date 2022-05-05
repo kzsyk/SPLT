@@ -65,7 +65,6 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
         length: 0
     });
     const global = useGlobalState()
-
     let globalSplitWords = useMemo(()=>!!global.splitWords?global.splitWords:[""],[global.splitWords])
     const [rawText, setRawText] = useState<string>(null);
     const [text, setText] = useState<string[]>(null);
@@ -222,6 +221,7 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
     },[setIsEdit])
 
     const blur =useCallback((e) => {
+        if(isEdit) return
         e.preventDefault()
         callbackEdit(false, null, 0)
     },[callbackEdit])
@@ -245,7 +245,7 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
             e.preventDefault()
             callbackEdit(true,ref.current,0);
         }
-    },[callbackEdit])
+    },[callbackEdit,isEdit])
 
     const focusSentence = useCallback((ref, select: number) => {
         if(!ref.current[select]) return
@@ -319,7 +319,7 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
                 e.stopPropagation();
             }
         }
-    },[isEdit]);
+    },[isEdit,getCaretPos,focusSentence,callbackEdit,updateState]);
 
     const selectDom = async() => {
         let isCanceled = false

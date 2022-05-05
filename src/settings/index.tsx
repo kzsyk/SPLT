@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import React, { useCallback, useState, useEffect, useMemo,useRef, forwardRef, useImperativeHandle } from "react";
 import styled from 'styled-components';
 
 import { Tabs, Tab, Content } from "./Tabs";
@@ -104,14 +104,15 @@ let Setting = (props, ref) => {
     const dispatch = useDispatch();
     const confRef = useRef();
 
-    const isOpen = props.isOpen;
+    const isOpen = useMemo(()=>props.isOpen,[props]);
     const [active, setActive] = useState<number>(1);
-    const handleClick = e => {
+    const [style, setStyle] = useState<Style>(init_dammy)
+    const handleClick = useCallback((e) => {
         const index = parseInt(e.currentTarget.value, 0);
         if (index) {
             setActive(index);
         }
-    };
+    },[setActive]);
 
     useImperativeHandle(ref, () => ({
         autoRenew: () => {
@@ -122,7 +123,6 @@ let Setting = (props, ref) => {
             });
         }
     }));
-    const [style, setStyle] = useState<Style>(init_dammy)
 
     useEffect(() => {
         if (style) {
@@ -144,7 +144,6 @@ let Setting = (props, ref) => {
                     else {
                         const init: Style = await result["splt_styles"];
                         setStyle(init)
-                        console.log(init)
                         updateValue("", init, "")
                     }
                 });
@@ -486,7 +485,6 @@ let Setting = (props, ref) => {
                     className={classes.saveButton}
                     onClick={() => {
                         chrome.storage.sync.set({ splt_styles: style }, () => {
-                            console.log("save");
                             console.dir(style)
                             updateValue("", style, "")
                         })

@@ -1,7 +1,6 @@
 // cross-extension messaging
 const waitPageLoad = async (callback) => {
   // 取得するタブの条件
-  console.log(callback)
   const queryInfo = {
     active: true,
     windowId: chrome.windows.WINDOW_ID_CURRENT
@@ -11,7 +10,6 @@ const waitPageLoad = async (callback) => {
   chrome.tabs.query(queryInfo, async function (result) {
     // 配列の先頭に現在タブの情報が入っている
     const currentTab = result.shift();
-    console.log(currentTab)
     if (currentTab.status === 'complete') {
       // ロードが完了していたら、コールバックを実行
       callback(currentTab);
@@ -27,8 +25,6 @@ const waitPageLoad = async (callback) => {
 }
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-
-  console.log("test")
   if (request.message === 'selected') {
     await waitPageLoad((tab) => {
       if (!request.data) {
@@ -55,11 +51,11 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
   if (tab) {
     if (info.menuItemId === "select") {
       waitPageLoad((tab) => {
-        chrome.tabs.sendMessage(tab.id, { message: "select" }, () => { console.log(tab) });
+        chrome.tabs.sendMessage(tab.id, { message: "select" }, () => { });
       })
     } else if (info.menuItemId === "paste") {
       waitPageLoad((tab) => {
-        chrome.tabs.sendMessage(tab.id, { message: "paste" }, () => { console.log(tab) });
+        chrome.tabs.sendMessage(tab.id, { message: "paste" }, () => { });
       })
     }
   }
