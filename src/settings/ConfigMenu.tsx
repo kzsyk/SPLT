@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { ConfigModal } from './ConfigModal'
-import Dropdown from './Dropdown'
-import { zIndexSearch } from './util'
-import { focusReturn } from './FocusController'
+import Setting from '.'
+import { zIndexSearch } from '../logics/utils'
+import { focusReturn } from '../logics/FocusController'
 
 import styled from 'styled-components';
 
@@ -66,21 +66,21 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false)
     const open = isOpen
 
-    const setConfigOpen = () => {
+    const setConfigOpen = useCallback(() => {
         setIsConfigOpen(prev => !prev);
         focusReturn()
-    }
+    },[setIsConfigOpen])
 
     const handleClose = useCallback(() => {
         setDialogOpen(false);   
-    }, []);
+    }, [setDialogOpen]);
 
     const copyAndClipboard = useCallback(() => {
         const text = document.getElementById('spltText').innerText;
         navigator.clipboard.writeText(text)
         setDialogOpen(true)
         focusReturn()
-    }, [])
+    }, [setDialogOpen])
 
     const renewRef = useRef(null)
 
@@ -125,7 +125,7 @@ export const ConfigMenu: React.VFC<{ isOpen: boolean }> = ({ isOpen }) => {
                 isOpen={isConfigOpen} 
                 color="rgba(240,240,240,.9)"
             >
-                <Dropdown isOpen={open} ref={renewRef} />
+                <Setting isOpen={open} ref={renewRef} />
             </ConfigModal>
                         
             {/* 

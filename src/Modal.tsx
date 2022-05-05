@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from 'styled-components';
-import { zIndexSearch } from './util'
+import { zIndexSearch } from './logics/utils'
 import { ScrollBar } from './ScrollBar';
 
 type modalType = {

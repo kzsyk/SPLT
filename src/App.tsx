@@ -3,10 +3,10 @@ import ReactDOM from "react-dom";
 import styled from 'styled-components';
 import FocusLock from "react-focus-lock"
 
-import { zIndexSearch, backfaceFixed } from './util'
+import { zIndexSearch, backfaceFixed } from './logics/utils'
 import { SelectText } from "./SelectText"
 import { Modal } from './Modal'
-import { ConfigMenu } from "./ConfigMenu"
+import { ConfigMenu } from "./settings/ConfigMenu"
 import { StyleContextProvider } from "./Context"
 import { useGlobalState } from "./Context"
 
@@ -22,7 +22,7 @@ const Background = styled.div<ModalBackground>`
     background-color: ${props => props.backgroundColor};
     position:fixed;
     top:0;
-    z-index: ${props => props.isOpen ? zIndexSearch() : 0};
+    z-index: ${props => props.isOpen ? zIndexSearch : 0};
     width:${props => props.isOpen ? "100vw" : "0vw"};
     height:${props => props.isOpen ? "100vh" : "0vh"};
     visibility: ${props => props.isOpen ? "visible" : "hidden"};
@@ -55,7 +55,7 @@ export const ContentComponent: React.FC = () => {
             e.preventDefault();
             setShow(false)
         }
-    }, [])
+    }, [setShow])
 
     return <>
             <Background

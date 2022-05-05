@@ -1,8 +1,8 @@
 
-import React, { useState, useEffect, useRef } from "react";
-import { Modal } from "./Modal";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Modal } from "../Modal";
 import styled from 'styled-components';
-import { zIndexSearch } from './util'
+import {zIndexSearch} from '../logics/utils'
 
 const CustomModal = styled(Modal)`
     overlay: {
@@ -47,14 +47,14 @@ export const ConfigModal = (props: confModal) => {
         }
     }, [props.isOpen])
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
         if (isOpen && e.key === "Escape") {
             e.preventDefault();
             setModalState(false)
             props.isClose()
             e.stopPropagation();
         }
-    }
+    },[setModalState,props])
 
     return (
         <div onKeyDown={(e) => handleKeyDown(e)} ref={ref} tabIndex={props.isOpen ? -1 : null}>

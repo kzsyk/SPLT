@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
-import { copyStyles } from "./util";
 
 export const NewWindow = ({ children, closeWindowPortal }) => {
     const externalWindow = useRef(
@@ -15,7 +14,6 @@ export const NewWindow = ({ children, closeWindowPortal }) => {
 
     externalWindow.current.document.title = "SPLT";
     externalWindow.current.document.body.appendChild(containerEl);
-    copyStyles(document, externalWindow.current.document);
 
     externalWindow.current.addEventListener("beforeunload", () => {
         closeWindowPortal(false);

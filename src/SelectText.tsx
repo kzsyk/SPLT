@@ -1,10 +1,10 @@
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import { getCaretPos } from './util'
+import React, { useRef, useState, useEffect, useMemo,useCallback } from "react";
+import { getCaretPos } from 'util/util'
 import DomInspector from 'dom-inspector';
 import styled from 'styled-components';
 import { useGlobalState } from "./Context"
-import { focusStore } from "./FocusController"
+import { focusStore } from "./logics/FocusController"
 
 type TextComponent = {
     height: number;
@@ -44,6 +44,7 @@ const Pstyle = styled.div<PtextColor>`
 
 const TextRenderArea = styled.div<TextComponent>`
     position: relative;
+    text-align: left;
     white-space: pre-wrap;
     overflow-wrap: word-wrap;
     margin:5%;
@@ -64,7 +65,8 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
         length: 0
     });
     const global = useGlobalState()
-    let globalSplitWords = global.splitWords
+
+    let globalSplitWords = useMemo(()=>!!global.splitWords?global.splitWords:[""],[global.splitWords])
     const [rawText, setRawText] = useState<string>(null);
     const [text, setText] = useState<string[]>(null);
     const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -195,7 +197,8 @@ export const SelectText: React.VFC<{ updateState: ((isState: boolean) => void) }
     }, []);
 
     const splitText = (text: string) => {
-        const splitSymbol = "(?<=[" + global.splitWords.join("") + "])";
+        console.log(globalSplitWords)
+        const splitSymbol = "(?<=[" + globalSplitWords.join("") + "])";
         const reg = new RegExp(splitSymbol, "igu")
         const sendText = text ? text : document.getElementById('spltText').innerText;
         const splitList = sendText.split(reg)

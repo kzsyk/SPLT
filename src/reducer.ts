@@ -71,9 +71,8 @@ export const initStorage: storageData = {
 export const getData = async () => {
     return await readLocalStorage('splt_styles').then((result: storageData) => {
         if (!result) {
-            chrome.storage.sync.set({ splt_styles: initStorage }, () => { })
+            return chrome.storage.sync.set({ splt_styles: initStorage }, () => { })
         } else {
-            storage = result
             return result
         }
     });

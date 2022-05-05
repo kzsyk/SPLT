@@ -1,7 +1,7 @@
 //@ts-check
 
 export const zIndexSearch = () => {
-    const elements = document.getElementsByTagName("*")
+    const elements = document.getElementsByTagName("*") as HTMLCollectionOf<HTMLElement>;
     let highestIndex = 0;
     for (let i = 0; i < elements.length - 1; i++) {
         const zIndex = elements[i].style.zIndex
@@ -24,7 +24,7 @@ export const backfaceFixed = (fixed) => {
      */
     const scrollingElement = () => {
         const browser = window.navigator.userAgent.toLowerCase();
-        if ('scrollingElement' in document) return document.scrollingElement;
+        if ('scrollingElement' in document as any) return document.scrollingElement ;
         if (browser.indexOf('webkit') > 0) return document.body;
         return document.documentElement;
     };
@@ -78,10 +78,10 @@ export const getCaretPos = () => {
     else return -1;
 }
 
+/*
 
 export const copyStyles = (sourceDoc, targetDoc) => {
     Array.from(sourceDoc.styleSheets).forEach(styleSheet => {
-        console.log(styleSheet)
         if (styleSheet.cssRules) {
             // true for inline styles
             const newStyleEl = sourceDoc.createElement("style");
@@ -99,7 +99,9 @@ export const copyStyles = (sourceDoc, targetDoc) => {
                 newLinkEl.href = styleSheet.href;
                 console.log("true\n" + styleSheet.href)
                 targetDoc.head.appendChild(newLinkEl);
-            */
+           
         }
     });
 }
+
+ */

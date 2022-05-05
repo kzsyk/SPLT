@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { RgbaStringColorPicker } from "react-colorful";
-import useDebounce from "./UseDebounce";
+import useDebounce from "../logics/UseDebounce";
 
 export const ColorPicker: React.VFC<{ dispatchColor: ((state: string) => void), initial: string }> = ({ dispatchColor, initial }) => {
     const [color, setColor] = useState<string>(initial)
     const [mounted, setIsMount] = useState<boolean>(false)
-    const handleOnChange = (value: string) => {
+    const handleOnChange = useCallback((value: string) => {
         setColor(value)
         setIsMount(true)
-    }
+    },[setColor,setIsMount])
 
     const debouncedValue = useDebounce<string>(color, 200)
 

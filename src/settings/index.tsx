@@ -15,9 +15,9 @@ import HeightIcon from '@material-ui/icons/HeightOutlined';
 import { Button } from '@material-ui/core'
 
 import { ColorPicker } from './ColorPicker';
-import { zIndexSearch } from './util';
-import { ScrollBar } from './ScrollBar';
-import { useDispatch } from "./Context";
+import { zIndexSearch } from 'util/util';
+import { ScrollBar } from '../ScrollBar';
+import { useDispatch } from "../Context";
 import { TagsForm } from "./TagsForm";
 
 interface Style {
@@ -37,7 +37,7 @@ interface Style {
 
 const useStyles = makeStyles({
     root: {
-        width: "96%", height: "70%", position: "fixed", zIndex: zIndexSearch() + 200, color: "black"
+        width: "96%", height: "70%", position: "fixed", zIndex: zIndexSearch + 200, color: "black"
     },
     saveButton: {
         position: "fixed", opacity: 1, right: "30%", top: "90%", margin: "1%"
@@ -68,40 +68,41 @@ const LeftDiv = styled.div`
 
 const RightDiv = styled.div`
     position:relative;
+    text-align:right;
     width:90%;
     top:3%;
     overflow-x: hidden;
     margin 2%;
 `
+const init_color = {
+    "fontColor": "rgba(200,200,200,.2)",
+    "highlight": "rgba(0,0,0,1)",
+    "modal": "rgba(240,240,250,1)",
+    "shadow": "rgba(0,0,0,.5)",
+    "backgroundModal": "rgba(240,240,250,1)"
+}
 
-let Dropdown = (props, ref) => {
+const fontSize = 18
+const height = 1.8
+const font = `游明朝, "Yu Mincho", YuMincho`
+const fontWeight = 150
+const init_splitWord: string[] = ["、", "。","」","』"]
+
+
+const init_dammy = {
+    fontSize: fontSize,
+    height: height,
+    font: font,
+    fontWeight: fontWeight,
+    color: init_color,
+    splitWords: init_splitWord
+}
+
+let Setting = (props, ref) => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
     const confRef = useRef();
-
-    const fontSize = 18
-    const height = 1.8
-    const font = `游明朝, "Yu Mincho", YuMincho`
-    const fontWeight = 150
-    const init_splitWord: string[] = ["、", "。","」","』"]
-
-    const init_color = {
-        "fontColor": "rgba(200,200,200,.2)",
-        "highlight": "rgba(0,0,0,1)",
-        "modal": "rgba(240,240,250,1)",
-        "shadow": "rgba(0,0,0,.5)",
-        "backgroundModal": "rgba(240,240,250,1)"
-    }
-
-    const init_dammy = {
-        fontSize: fontSize,
-        height: height,
-        font: font,
-        fontWeight: fontWeight,
-        color: init_color,
-        splitWords: init_splitWord
-    }
 
     const isOpen = props.isOpen;
     const [active, setActive] = useState<number>(1);
@@ -498,5 +499,5 @@ let Dropdown = (props, ref) => {
     )
 }
 
-Dropdown = forwardRef(Dropdown);
-export default Dropdown;
+Setting = forwardRef(Setting);
+export default Setting;
