@@ -101,7 +101,6 @@ const splitText = (text, splitWords) => {
     const reg = new RegExp(splitSymbol, "igu");
     const sendText = text ? text : document.getElementById('spltText').innerText;
     const splitList = sendText.split(reg);
-    console.log(splitWords);
     return splitList;
 };
 

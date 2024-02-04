@@ -1,18 +1,17 @@
 const path = require("path");
 
 module.exports = {
-
     entry: {
-        popup: path.join(__dirname, "src/Popup.tsx"),
+        popup: path.join(__dirname, "src/App.tsx"),
         selectText: path.join(__dirname, "src/SelectText.tsx"),
-        background: path.join(__dirname, "src/background.ts"),
-        splitText: path.join(__dirname, "src/splitText.ts"),
         modal: path.join(__dirname, "src/Modal.tsx"),
-        configMenu: path.join(__dirname, "src/ConfigMenu.tsx"),
-        dropdown: path.join(__dirname, "src/Dropdown.tsx"),
         scrollBar: path.join(__dirname, "src/ScrollBar.tsx"),
-        context: path.join(__dirname, "src/Context.tsx"),
-        help: path.join(__dirname, "src/Help.tsx")
+        configMenu: path.join(__dirname, "src/settings/ConfigMenu.tsx"),
+        help: path.join(__dirname, "src/settings/Help.tsx"),
+        context: path.join(__dirname, "src/logics/Context.tsx"),
+        background: path.join(__dirname, "src/logics/background.ts"),
+        util: path.join(__dirname, "src/logics/utils.ts"),
+
     },
     output: {
         path: path.join(__dirname, "dist/js"),
